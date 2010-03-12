@@ -1,0 +1,42 @@
+* General
+
+Commands are sent via serial port, 9600 8N1, hardwarde (CTR/CTS) +
+software flow (XON/XOFF) control [fn:1].
+
+The format is 
+
+<address><command><checksum>
+
+The address can be one of the following:
+
+- \FF\02A28 for left arm
+- \FF\02A18 for right arm
+- \FF\02A11 for pump 1
+
+Commands are:
+
+For the arms:
+- P1 init arm
+- SP0 set position recovery
+- SA\s2500\s1000\s1200\s10 [fn:2] set position range
+
+For the pump:
+- \sZ1\s0\sR [fn:3] init pump 
+
+Finally, send completed receive bits [fn:4]
+
+\FF\02@<i><checksum> 
+
+with <i> being 18,28,18,28,18,28,11,12,18,28,11,12,11,12
+
+* Footnotes
+
+[fn:1] need to check, if software flow control is really necessary!
+
+[fn:2] what is the meaning of these parameters?
+
+[fn:3] what is the meaning of these parameters?
+
+[fn:4] whate the heck is this?
+
+
