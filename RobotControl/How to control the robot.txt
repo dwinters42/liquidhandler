@@ -1,7 +1,26 @@
 * General
 
-Commands are sent via serial port, 9600 8N1, hardwarde (CTR/CTS) +
-software flow (XON/XOFF) control [fn:1].
+** Serial port settings
+ 
+Commands are sent via serial port, 9600 8N1, hardware (CTR/CTS) +
+software flow (XON/XOFF) control, but handshake seems to be ignored,
+in fact a special protocol is used.
+
+** Communication protocol
+
+The protocol is the following:
+
+- send a command
+- read "command accepted" return code
+- busy wait until "command finished" return code
+- clear flag, basically acknowledges that you noticed the command is
+  done.
+
+** Start and stop code
+
+All communication messages are encapsulated in 0xFF0x02<message>OD.
+
+** Command syntax
 
 The format is 
 
@@ -9,34 +28,38 @@ The format is
 
 The address can be one of the following:
 
-- \FF\02A28 for left arm
-- \FF\02A18 for right arm
-- \FF\02A11 for pump 1
+- 18 for arm 1 (left)
+- 11 for syringe 1 (left)
+- 12 for syringe 2 (right)
+- 28 for arm 2 (right)
 
-Commands are:
+** Return codes
 
-For the arms:
-- P1 init arm
-- SP0 set position recovery
-- SA\s2500\s1000\s1200\s10 [fn:2] set position range
+The return code is of the following form:
 
-For the pump:
-- \sZ1\s0\sR [fn:3] init pump 
+<address>x<diagnostic messages>
 
-Finally, send completed receive bits [fn:4]
+where x is one of:
 
-\FF\02@<i><checksum> 
+- @: command accepted
+- A: error, for example when position is out of range
+- Q: information messages
 
-with <i> being 18,28,18,28,18,28,11,12,18,28,11,12,11,12
+There are several other return codes (e.g. Y) that have not been
+reverse-enginered.
 
-* Footnotes
+** Clear flag command
 
-[fn:1] need to check, if software flow control is really necessary!
+To end the sequence, send @<address>.
 
-[fn:2] what is the meaning of these parameters?
+** Possible Commands
 
-[fn:3] what is the meaning of these parameters?
+- PI: initialize arm, needs to be done before first use
+- SP0: set position recovery
+- SA x y z s: set position range of arm
+- PA x y z: arm goto position
+- Sx Ay d R: set syringe speed x (1-20), position y (0-2000),
+  direction of valve d (I for input, O for output) 
 
-[fn:4] whate the heck is this?
 
 
