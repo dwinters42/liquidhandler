@@ -1,12 +1,10 @@
-* General
-
-** Serial port settings
+* Serial port settings
  
 Commands are sent via serial port, 9600 8N1, hardware (CTR/CTS) +
 software flow (XON/XOFF) control, but handshake seems to be ignored,
 in fact a special protocol is used.
 
-** Communication protocol
+* Communication protocol
 
 The protocol is the following:
 
@@ -16,15 +14,30 @@ The protocol is the following:
 - clear flag, basically acknowledges that you noticed the command is
   done.
 
-** Start and stop code
+* Start and stop code
 
-All communication messages are encapsulated in 0xFF0x02<message>OD.
+All communication messages are encapsulated in 0xFF0x02<message>0x0D.
 
-** Command syntax
+* Command syntax
 
 The format is 
 
-<address><command><checksum>
+0xFF0x02A<address><command>0x03<checksum>0x0D
+
+Checksum:
+
+#+BEGIN_EXAMPLE
+s="\xFF\x02A18PA 29 29 29"
+chk=ord(s[1]);
+
+for c in s[2:len(s)]:
+    chk=chk ^ ord(c)
+
+chk = chk ^ 0x03
+print "%s\x03%c\x0d" % (s,chk)
+#+END_EXAMPLE
+
+* Addresses
 
 The address can be one of the following:
 
@@ -33,7 +46,7 @@ The address can be one of the following:
 - 12 for syringe 2 (right)
 - 28 for arm 2 (right)
 
-** Return codes
+* Return codes
 
 The return code is of the following form:
 
@@ -48,11 +61,11 @@ where x is one of:
 There are several other return codes (e.g. Y) that have not been
 reverse-enginered.
 
-** Clear flag command
+* Clear flag command
 
 To end the sequence, send @<address>.
 
-** Possible Commands
+* Possible Commands
 
 - PI: initialize arm, needs to be done before first use
 - SP0: set position recovery
