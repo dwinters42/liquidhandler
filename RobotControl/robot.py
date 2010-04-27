@@ -8,12 +8,12 @@ import time
 ### class Robot ###
 
 class Robot():
-    def __init__(self):
+    def __init__(self,port="/dev/ttyUSB0"):
         self.armaddr=[18,28]
         self.armlimits=[[2500, 1000, 1200, 10],[1600, 1000, 1200, 10]]
         self.syringeaddr=[11]
 
-        self.s=serial.Serial('/dev/ttyUSB0',rtscts=0,xonxoff=0,timeout=0)
+        self.s=serial.Serial(port,rtscts=0,xonxoff=0,timeout=0)
 
         # init arms
         for i in range(len(self.armaddr)):
