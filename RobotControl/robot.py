@@ -11,6 +11,7 @@ class Robot():
     def __init__(self):
         self.armaddr=[18,28]
         self.armlimits=[[2500, 1000, 1200, 10],[1600, 1000, 1200, 10]]
+        self.syringeaddr=[11]
 
         self.s=serial.Serial('/dev/ttyUSB0',rtscts=0,xonxoff=0,timeout=0)
 
@@ -22,9 +23,24 @@ class Robot():
                                   self.armlimits[i][2],self.armlimits[i][3])
             self._sendcommand(self.armaddr[i],s)
 
+        # init syringes
+        for i in range(len(self.syringeaddr)):
+            self._sendcommand(self.syringeaddr[i],"Z1 0 R")
+
     def move(self,armnum,pos=[0,0,0]):
         s="PA %i %i %i" % (pos[0],pos[1],pos[2])
         return self._sendcommand(self.armaddr[armnum-1],s)
+
+    def syringe(self,syringe,speed,position,direction):
+        if direction == "in":
+            dircode='I'
+        elif direction == 'out':
+            dircode='O'
+        else:
+            raise ValueError,"Syringe direction must be 'in' or 'out'!"
+
+        s="S%i A%i %c R" % (speed,position,dircode)
+        return self._sendcommand(self.syringeaddr[syringe-1],s)
 
     def _makecommandstring(self,command):
         s="\xFF\x02%s\x03" % (command)
