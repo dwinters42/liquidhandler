@@ -27,11 +27,11 @@ class Robot():
         for i in range(len(self.syringeaddr)):
             self._sendcommand(self.syringeaddr[i],"Z1 0 R")
 
-    def move(self,armnum,pos=[0,0,0]):
+    def Move(self,armnum,pos=[0,0,0]):
         s="PA %i %i %i" % (pos[0],pos[1],pos[2])
         return self._sendcommand(self.armaddr[armnum-1],s)
-
-    def syringe(self,syringe,speed,position,direction):
+    
+    def Syringe(self,syringe,speed,position,direction):
         if direction == "in":
             dircode='I'
         elif direction == 'out':
