@@ -12,6 +12,7 @@ class Robot():
         self.armaddr=[18,28]
         self.armlimits=[[2500, 1000, 1200, 10],[1600, 1000, 1200, 10]]
         self.syringeaddr=[11]
+        self.locations={}
 
         self.s=serial.Serial(port,rtscts=0,xonxoff=0,timeout=0)
 
@@ -26,6 +27,13 @@ class Robot():
         # init syringes
         for i in range(len(self.syringeaddr)):
             self._sendcommand(self.syringeaddr[i],"Z1 0 R")
+
+    def AddPosition(self,name,coordinates):
+        self.locations[name]=coordinates
+
+    def Goto(self,armnum,location):
+        pos=self.locations[location]
+        self.Move(armnum,pos)
 
     def Move(self,armnum,pos=[0,0,0]):
         s="PA %i %i %i" % (pos[0],pos[1],pos[2])
