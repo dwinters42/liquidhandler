@@ -100,13 +100,3 @@ class Robot():
             raise IOError,"Robot returns error!"
 
 ### end of class Robot ###
-
-if __name__ == '__main__':
-    print("Initialise robot ...")
-    r=Robot()
-    print("move arms ...")
-    r.move(1,[800,600,40])
-    r.move(2,[500,1050,500])
-    r.move(1,[0,0,0])
-    r.move(2,[0,0,0])
-    print("done!")
