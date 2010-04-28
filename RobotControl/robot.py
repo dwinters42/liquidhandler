@@ -28,6 +28,8 @@ class Robot():
         for i in range(len(self.syringeaddr)):
             self._sendcommand(self.syringeaddr[i],"Z1 0 R")
 
+    ## Arm commands ##
+
     def AddPosition(self,name,coordinates):
         self.locations[name]=coordinates
 
@@ -39,6 +41,14 @@ class Robot():
         s="PA %i %i %i" % (pos[0],pos[1],pos[2])
         return self._sendcommand(self.armaddr[armnum-1],s)
     
+    ## Pump commands ##
+
+    def Dispense(self,units):
+        pass
+
+    def Draw(self,units,source='buffer'):
+        pass
+
     def Syringe(self,syringe,speed,position,direction):
         if direction == "in":
             dircode='I'
@@ -49,6 +59,8 @@ class Robot():
 
         s="S%i A%i %c R" % (speed,position,dircode)
         return self._sendcommand(self.syringeaddr[syringe-1],s)
+
+    ## internal stuff, not for external use ##
 
     def _makecommandstring(self,command):
         s="\xFF\x02%s\x03" % (command)
