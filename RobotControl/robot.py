@@ -9,11 +9,18 @@ import time
 
 class Robot():
     def __init__(self,port="/dev/ttyUSB0"):
+        # constants for arms
         self.armaddr=[18,28]
         self.armlimits=[[2500, 1000, 1200, 10],[1600, 1000, 1200, 10]]
-        self.syringeaddr=[11]
+
+        # constants for pumps
+        self.pumpaddr=[11]
+        self.syringecontents=[0]
+
+        # locations to Goto to
         self.locations={}
 
+        # init serial port
         self.s=serial.Serial(port,rtscts=0,xonxoff=0,timeout=0)
 
         # init arms
@@ -24,9 +31,9 @@ class Robot():
                                   self.armlimits[i][2],self.armlimits[i][3])
             self._sendcommand(self.armaddr[i],s)
 
-        # init syringes
-        for i in range(len(self.syringeaddr)):
-            self._sendcommand(self.syringeaddr[i],"Z1 0 R")
+        # init pumps
+        for i in range(len(self.pumpaddr)):
+            self._sendcommand(self.pumpaddr[i],"Z1 0 R")
 
     ## Arm commands ##
 
@@ -43,22 +50,40 @@ class Robot():
     
     ## Pump commands ##
 
-    def Dispense(self,units):
-        pass
+    def Dispense(self,pump,units):
+        '''Dispense units (0-2000) of liquid from syringe'''
+        if units > self.syringecontents[pump-1]:
+            raise ValueError, "Not enough liquid in syringe!"
 
-    def Draw(self,units,source='buffer'):
-        pass
+        self.Pump(pump,3,self.syringecontents[pump-1],'out')
+        self.Pump(pump,3,self.syringecontents[pump-1]-units,'out')
+        self.syringecontents[pump-1]=self.syringecontents[pump-1]-units
 
-    def Syringe(self,syringe,speed,position,direction):
+    def Draw(self,pump,units,source='bottle'):
+        if source == 'bottle':
+            direction='in'
+        elif source == 'sample':
+            direction='out'
+        else:
+            raise ValueError,"Source for Dispense must be either bottle or sample!"
+    
+        if self.syringecontents[pump-1]+units>2000:
+            raise ValueError,"Syringe can only contain up to 2000 units!"
+
+        self.Pump(pump,3,self.syringecontents[pump-1],direction)
+        self.Pump(pump,3,self.syringecontents[pump-1]+units,direction)
+        self.syringecontents[pump-1]=self.syringecontents[pump-1]+units
+
+    def Pump(self,pump,speed,position,direction):
         if direction == "in":
             dircode='I'
         elif direction == 'out':
             dircode='O'
         else:
-            raise ValueError,"Syringe direction must be 'in' or 'out'!"
+            raise ValueError,"Pump direction must be 'in' or 'out'!"
 
         s="S%i A%i %c R" % (speed,position,dircode)
-        return self._sendcommand(self.syringeaddr[syringe-1],s)
+        return self._sendcommand(self.pumpaddr[pump-1],s)
 
     ## internal stuff, not for external use ##
 
