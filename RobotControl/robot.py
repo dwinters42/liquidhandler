@@ -8,7 +8,7 @@ import time
 ### class Robot ###
 
 class Robot():
-    def __init__(self,port="/dev/ttyUSB0"):
+    def __init__(self,port):
         # constants for arms
         self.armaddr=[18,28]
         self.armlimits=[[2500, 1000, 1200, 10],[1600, 1000, 1200, 10]]
@@ -38,43 +38,53 @@ class Robot():
     ## Arm commands ##
 
     def AddPosition(self,name,coordinates):
+        '''Memorize position with coordinates [x,y,z] as 'name' '''
         self.locations[name]=coordinates
 
     def Goto(self,armnum,location):
+        '''Move arm 'armnum' to memorizid position 'location' '''
         pos=self.locations[location]
         self.Move(armnum,pos)
 
     def Move(self,armnum,pos=[0,0,0]):
-        s="PA %i %i %i" % (pos[0],pos[1],pos[2])
+        '''Move arm 'armnum' to coordinates 'pos' ([x,y,z])'''
+        s="PA %i %i %i" % (int(pos[0]),int(pos[1]),int(pos[2]))
         return self._sendcommand(self.armaddr[armnum-1],s)
     
     ## Pump commands ##
 
     def Dispense(self,pump,units):
         '''Dispense units (0-2000) of liquid from syringe'''
-        if units > self.syringecontents[pump-1]:
+        if int(units) > self.syringecontents[pump-1]:
             raise ValueError, "Not enough liquid in syringe!"
 
         self.Pump(pump,3,self.syringecontents[pump-1],'out')
-        self.Pump(pump,3,self.syringecontents[pump-1]-units,'out')
-        self.syringecontents[pump-1]=self.syringecontents[pump-1]-units
+        self.Pump(pump,3,self.syringecontents[pump-1]-int(units),'out')
+        self.syringecontents[pump-1]=self.syringecontents[pump-1]-int(units)
 
     def Draw(self,pump,units,source='bottle'):
+        '''Draw units (0-2000) from either bottle or sample'''
         if source == 'bottle':
             direction='in'
         elif source == 'sample':
             direction='out'
         else:
-            raise ValueError,"Source for Dispense must be either bottle or sample!"
+            raise ValueError,"Source must be either 'bottle' or 'sample'!"
     
         if self.syringecontents[pump-1]+units>2000:
             raise ValueError,"Syringe can only contain up to 2000 units!"
 
         self.Pump(pump,3,self.syringecontents[pump-1],direction)
-        self.Pump(pump,3,self.syringecontents[pump-1]+units,direction)
-        self.syringecontents[pump-1]=self.syringecontents[pump-1]+units
+        self.Pump(pump,3,self.syringecontents[pump-1]+int(units),direction)
+        self.syringecontents[pump-1]=self.syringecontents[pump-1]+int(units)
 
     def Pump(self,pump,speed,position,direction):
+        if int(speed) < 0 or int(speed)>20:
+            raise ValueError,"Pump speed must be between 0 and 20!"
+
+        if int(position) < 0 or int(position)>2000:
+            raise ValueError,"Pump position must be between 0 and 2000!"
+
         if direction == "in":
             dircode='I'
         elif direction == 'out':
@@ -82,7 +92,7 @@ class Robot():
         else:
             raise ValueError,"Pump direction must be 'in' or 'out'!"
 
-        s="S%i A%i %c R" % (speed,position,dircode)
+        s="S%i A%i %c R" % (int(speed),int(position),dircode)
         return self._sendcommand(self.pumpaddr[pump-1],s)
 
     ## internal stuff, not for external use ##
