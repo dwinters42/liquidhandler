@@ -6,6 +6,8 @@ import wx
 import robot
 
 robot.debug=True
+robot.demomode=True
+
 # begin wxGlade: extracode
 # end wxGlade
 
@@ -24,15 +26,27 @@ class ManualModeFrame(wx.Frame):
         self.buttonYminus = wx.Button(self, -1, "Y-")
         self.buttonDown = wx.Button(self, -1, "Down")
         self.label_2 = wx.StaticText(self, -1, "Selected Arm:")
-        self.spinCtrlArmSelected = wx.SpinCtrl(self, -1, "0", min=0, max=100)
+        self.spinCtrlArmSelected = wx.SpinCtrl(self, -1, "1", min=0, max=100)
+        self.label_2_copy = wx.StaticText(self, -1, "Stepsize for buttons:")
+        self.comboBoxStepSize = wx.ComboBox(self, -1, choices=["1", "10", "100"], style=wx.CB_DROPDOWN|wx.CB_SIMPLE|wx.CB_READONLY)
+        self.listBoxPos = wx.ListBox(self, -1, choices=[], style=wx.LB_MULTIPLE)
+        self.buttonGotoPos = wx.Button(self, -1, "Goto")
+        self.buttonSavePos = wx.Button(self, -1, "Save")
+        self.buttonRemove = wx.Button(self, -1, "Remove")
 
         self.__set_properties()
         self.__do_layout()
 
         self.Bind(wx.EVT_BUTTON, self.onButtonYplus, self.buttonYplus)
+        self.Bind(wx.EVT_BUTTON, self.onButtonUp, self.buttonUp)
         self.Bind(wx.EVT_BUTTON, self.onButtonXminus, self.buttonXminus)
         self.Bind(wx.EVT_BUTTON, self.onButtonXplus, self.buttonXplus)
         self.Bind(wx.EVT_BUTTON, self.onButtonYminus, self.buttonYminus)
+        self.Bind(wx.EVT_BUTTON, self.onButtonDown, self.buttonDown)
+        self.Bind(wx.EVT_LISTBOX_DCLICK, self.onListBoxPosDoubleClick, self.listBoxPos)
+        self.Bind(wx.EVT_BUTTON, self.onButtonGoto, self.buttonGotoPos)
+        self.Bind(wx.EVT_BUTTON, self.onButtonSave, self.buttonSavePos)
+        self.Bind(wx.EVT_BUTTON, self.onButtonRemove, self.buttonRemove)
         # end wxGlade
 
         self.r=robot.Robot("/dev/ttyUSB0")
@@ -46,13 +60,15 @@ class ManualModeFrame(wx.Frame):
         for i in range(len(manualframe_statusbar_fields)):
             self.manualframe_statusbar.SetStatusText(manualframe_statusbar_fields[i], i)
         self.labelPos.SetFont(wx.Font(18, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
+        self.comboBoxStepSize.SetSelection(2)
         # end wxGlade
 
     def __do_layout(self):
         # begin wxGlade: ManualModeFrame.__do_layout
         sizer_4 = wx.BoxSizer(wx.VERTICAL)
         sizerarmcontrol = wx.StaticBoxSizer(self.sizerarmcontrol_staticbox, wx.VERTICAL)
-        sizer_5 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_6 = wx.BoxSizer(wx.HORIZONTAL)
+        grid_sizer_2 = wx.GridSizer(2, 2, 5, 5)
         grid_sizer_1 = wx.GridSizer(3, 4, 5, 5)
         sizerarmcontrol.Add(self.labelPos, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
         grid_sizer_1.Add((20, 20), 0, 0, 0)
@@ -68,9 +84,16 @@ class ManualModeFrame(wx.Frame):
         grid_sizer_1.Add((20, 20), 0, 0, 0)
         grid_sizer_1.Add(self.buttonDown, 1, wx.ALL|wx.EXPAND, 5)
         sizerarmcontrol.Add(grid_sizer_1, 1, wx.EXPAND, 0)
-        sizer_5.Add(self.label_2, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
-        sizer_5.Add(self.spinCtrlArmSelected, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5)
-        sizerarmcontrol.Add(sizer_5, 0, wx.EXPAND, 5)
+        grid_sizer_2.Add(self.label_2, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
+        grid_sizer_2.Add(self.spinCtrlArmSelected, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
+        grid_sizer_2.Add(self.label_2_copy, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
+        grid_sizer_2.Add(self.comboBoxStepSize, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5)
+        sizerarmcontrol.Add(grid_sizer_2, 0, wx.ALL|wx.EXPAND, 5)
+        sizerarmcontrol.Add(self.listBoxPos, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_6.Add(self.buttonGotoPos, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_6.Add(self.buttonSavePos, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_6.Add(self.buttonRemove, 1, wx.ALL|wx.EXPAND, 5)
+        sizerarmcontrol.Add(sizer_6, 0, wx.EXPAND, 5)
         sizer_4.Add(sizerarmcontrol, 1, wx.ALL|wx.EXPAND, 5)
         self.SetSizer(sizer_4)
         sizer_4.Fit(self)
@@ -85,7 +108,7 @@ class ManualModeFrame(wx.Frame):
 
     def onButtonXminus(self, event): # wxGlade: ManualModeFrame.<event_handler>
         pos=self.r.ShowPosition(1)
-        if pos[0] > 10:
+        if pos[0] >= 10:
             pos[0]=pos[0]-10
             self.r.Move(1,pos)
             self._update()
@@ -98,15 +121,39 @@ class ManualModeFrame(wx.Frame):
 
     def onButtonYminus(self, event): # wxGlade: ManualModeFrame.<event_handler>
         pos=self.r.ShowPosition(1)
-        if pos[1] > 10:
+        if pos[1] >= 10:
             pos[1]=pos[1]-10
             self.r.Move(1,pos)
             self._update()
 
     def _update(self):
         pos=self.r.ShowPosition(1)
-        self.labelPos.SetLabel("Pos: [%i %i %i]" % (pos[0],pos[1],pos[2]))
+        self.labelPos.SetLabel("Pos: [%4i %4i %4i]" % (pos[0],pos[1],pos[2]))
         
+
+    def onButtonUp(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        print "Event handler `onButtonUp' not implemented"
+        event.Skip()
+
+    def onButtonDown(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        print "Event handler `onButtonDown' not implemented"
+        event.Skip()
+
+    def onListBoxPosDoubleClick(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        print "Event handler `onListBoxPosDoubleClick' not implemented"
+        event.Skip()
+
+    def onButtonGoto(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        print "Event handler `onButtonGoto' not implemented"
+        event.Skip()
+
+    def onButtonSave(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        print "Event handler `onButtonSave' not implemented"
+        event.Skip()
+
+    def onButtonRemove(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        print "Event handler `onButtonRemove' not implemented"
+        event.Skip()
 
 # end of class ManualModeFrame
 
