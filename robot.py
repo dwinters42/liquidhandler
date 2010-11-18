@@ -1,6 +1,9 @@
 #/usr/bin/python
 
-debug=False
+debug=False # if True, log the communication with the robot to the
+            # command line
+demomode=False # if True, don't talk to the robot at all, suitable for
+               # testing
 
 import serial
 import time
@@ -21,7 +24,8 @@ class Robot():
         self.locations={}
 
         # init serial port
-        self.s=serial.Serial(port,rtscts=0,xonxoff=0,timeout=0)
+        if not demomode:
+            self.s=serial.Serial(port,rtscts=0,xonxoff=0,timeout=0)
 
         # init arms
         for i in range(len(self.armaddr)):
@@ -116,6 +120,9 @@ class Robot():
         return "%s%c\r" % (s,chk)
 
     def _sendcommand(self, address, command):
+        if demomode:
+            return
+
         # send command
         cmd="A%i%s" % (address,command)
         if debug:
