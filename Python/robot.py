@@ -30,6 +30,8 @@ class Robot():
             s="SA %i %i %i %i" % (self.armlimits[i][0],self.armlimits[i][2],\
                                   self.armlimits[i][2],self.armlimits[i][3])
             self._sendcommand(self.armaddr[i],s)
+        
+        self.curpos=[[0,0,0],[0,0,0]]
 
         # init pumps
         for i in range(len(self.pumpaddr)):
@@ -42,14 +44,21 @@ class Robot():
         self.locations[name]=coordinates
 
     def Goto(self,armnum,location):
-        '''Move arm 'armnum' to memorizid position 'location' '''
+        '''Move arm 'armnum' to memorized position 'location' '''
+        if self.locations.keys().count(location) == 0:
+            raise ValueError,"No such location!"
+
         pos=self.locations[location]
         self.Move(armnum,pos)
 
     def Move(self,armnum,pos=[0,0,0]):
         '''Move arm 'armnum' to coordinates 'pos' ([x,y,z])'''
         s="PA %i %i %i" % (int(pos[0]),int(pos[1]),int(pos[2]))
-        return self._sendcommand(self.armaddr[armnum-1],s)
+        self._sendcommand(self.armaddr[armnum-1],s)
+        self.curpos[armnum-1]=pos
+
+    def ShowPosition(self,armnum):
+        return self.curpos[armnum-1]
     
     ## Pump commands ##
 
