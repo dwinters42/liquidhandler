@@ -101,43 +101,42 @@ class ManualModeFrame(wx.Frame):
         # end wxGlade
 
     def onButtonYplus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        pos=self.r.ShowPosition(1)
-        pos[1]=pos[1]+10
-        self.r.Move(1,pos)
-        self._update()
+        self._movearm("y","pos")
 
     def onButtonXminus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        pos=self.r.ShowPosition(1)
-        if pos[0] >= 10:
-            pos[0]=pos[0]-10
-            self.r.Move(1,pos)
-            self._update()
+        self._movearm("x","neg")
 
     def onButtonXplus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        pos=self.r.ShowPosition(1)
-        pos[0]=pos[0]+10
-        self.r.Move(1,pos)
-        self._update()
+        self._movearm("x","pos")
 
     def onButtonYminus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        pos=self.r.ShowPosition(1)
-        if pos[1] >= 10:
-            pos[1]=pos[1]-10
-            self.r.Move(1,pos)
-            self._update()
+        self._movearm("y","neg")
 
-    def _update(self):
-        pos=self.r.ShowPosition(1)
+    def _movearm(self,axis="x",direction="pos"):
+        arm=int(self.spinCtrlArmSelected.GetValue())
+        pos=self.r.ShowPosition(arm)
+        stepsize=int(self.comboBoxStepSize.GetValue())
+
+        if axis == "x":
+            a=0
+        elif axis == "y":
+            a=1
+        else:
+            a=2
+
+        if direction == "pos":
+            pos[a]=pos[a]+stepsize
+        elif direction == "neg" and pos[a] >= stepsize:
+            pos[a]=pos[a]-stepsize
+
+        self.r.Move(arm,pos)
         self.labelPos.SetLabel("Pos: [%4i %4i %4i]" % (pos[0],pos[1],pos[2]))
-        
 
     def onButtonUp(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        print "Event handler `onButtonUp' not implemented"
-        event.Skip()
+        self._movearm("z","neg")
 
     def onButtonDown(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        print "Event handler `onButtonDown' not implemented"
-        event.Skip()
+        self._movearm("z","pos")
 
     def onListBoxPosDoubleClick(self, event): # wxGlade: ManualModeFrame.<event_handler>
         print "Event handler `onListBoxPosDoubleClick' not implemented"
