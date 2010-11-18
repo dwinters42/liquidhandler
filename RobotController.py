@@ -20,7 +20,6 @@
 
 import wx
 import robot
-import time
 
 robot.debug=True
 robot.demomode=True
@@ -34,7 +33,7 @@ class ManualModeFrame(wx.Frame):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.sizerarmcontrol_staticbox = wx.StaticBox(self, -1, "Arm control")
-        self.manualframe_statusbar = self.CreateStatusBar(1, 0)
+        self.statusbar = self.CreateStatusBar(1, 0)
         self.labelPos = wx.StaticText(self, -1, "Pos: [0000, 0000, 0000]")
         self.buttonYplus = wx.Button(self, -1, "Y+")
         self.buttonUp = wx.Button(self, -1, "Up")
@@ -46,7 +45,7 @@ class ManualModeFrame(wx.Frame):
         self.spinCtrlArmSelected = wx.SpinCtrl(self, -1, "1", min=1, max=2)
         self.label_2_copy = wx.StaticText(self, -1, "Stepsize for buttons:")
         self.comboBoxStepSize = wx.ComboBox(self, -1, choices=["1", "10", "100"], style=wx.CB_DROPDOWN|wx.CB_SIMPLE|wx.CB_READONLY)
-        self.listBoxPos = wx.ListBox(self, -1, choices=[], style=wx.LB_MULTIPLE)
+        self.listBoxPos = wx.ListBox(self, -1, choices=[], style=wx.LB_SINGLE)
         self.buttonGotoPos = wx.Button(self, -1, "Goto")
         self.buttonSavePos = wx.Button(self, -1, "Save")
         self.buttonRemove = wx.Button(self, -1, "Remove")
@@ -73,16 +72,16 @@ class ManualModeFrame(wx.Frame):
         busy=wx.BusyInfo("Initialising robot, please wait ...")
         wx.Yield()
         self.r=robot.Robot("/dev/ttyUSB0")
-        time.sleep(3)
+        self.statusbar.SetStatusText("Ready")
 
     def __set_properties(self):
         # begin wxGlade: ManualModeFrame.__set_properties
         self.SetTitle("Manual Control")
-        self.manualframe_statusbar.SetStatusWidths([-1])
+        self.statusbar.SetStatusWidths([-1])
         # statusbar fields
-        manualframe_statusbar_fields = ["manualframe_statusbar"]
-        for i in range(len(manualframe_statusbar_fields)):
-            self.manualframe_statusbar.SetStatusText(manualframe_statusbar_fields[i], i)
+        statusbar_fields = ["manualframe_statusbar"]
+        for i in range(len(statusbar_fields)):
+            self.statusbar.SetStatusText(statusbar_fields[i], i)
         self.labelPos.SetFont(wx.Font(18, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
         self.comboBoxStepSize.SetSelection(2)
         # end wxGlade
@@ -167,16 +166,25 @@ class ManualModeFrame(wx.Frame):
         event.Skip()
 
     def onButtonGoto(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        pos=self.r.locations.keys[self.listBoxPos.GetSelections()[0]]
+        arm=int(self.spinCtrlArmSelected.GetValue())
+        self.r.Goto(arm,pos)
+
         print "Event handler `onButtonGoto' not implemented"
         event.Skip()
 
     def onButtonSave(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        print "Event handler `onButtonSave' not implemented"
-        event.Skip()
+        arm=int(self.spinCtrlArmSelected.GetValue())
+        label=wx.GetTextFromUser("Name of location:", "New position")
+        self.r.AddPosition(label,self.r.ShowPosition(arm))
+        self._updatePosList()
 
     def onButtonRemove(self, event): # wxGlade: ManualModeFrame.<event_handler>
         print "Event handler `onButtonRemove' not implemented"
         event.Skip()
+
+    def _updatePosList(self):
+        self.listBoxPos.Set(self.r.locations.keys())
 
 # end of class ManualModeFrame
 
