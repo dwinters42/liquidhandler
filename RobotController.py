@@ -18,7 +18,7 @@ class ManualModeFrame(wx.Frame):
         wx.Frame.__init__(self, *args, **kwds)
         self.sizerarmcontrol_staticbox = wx.StaticBox(self, -1, "Arm control")
         self.manualframe_statusbar = self.CreateStatusBar(1, 0)
-        self.labelPos = wx.StaticText(self, -1, "Pos: 0000, 0000, 0000")
+        self.labelPos = wx.StaticText(self, -1, "Pos: [0000, 0000, 0000]")
         self.buttonYplus = wx.Button(self, -1, "Y+")
         self.buttonUp = wx.Button(self, -1, "Up")
         self.buttonXminus = wx.Button(self, -1, "X-")
@@ -26,7 +26,7 @@ class ManualModeFrame(wx.Frame):
         self.buttonYminus = wx.Button(self, -1, "Y-")
         self.buttonDown = wx.Button(self, -1, "Down")
         self.label_2 = wx.StaticText(self, -1, "Selected Arm:")
-        self.spinCtrlArmSelected = wx.SpinCtrl(self, -1, "1", min=0, max=100)
+        self.spinCtrlArmSelected = wx.SpinCtrl(self, -1, "1", min=1, max=2)
         self.label_2_copy = wx.StaticText(self, -1, "Stepsize for buttons:")
         self.comboBoxStepSize = wx.ComboBox(self, -1, choices=["1", "10", "100"], style=wx.CB_DROPDOWN|wx.CB_SIMPLE|wx.CB_READONLY)
         self.listBoxPos = wx.ListBox(self, -1, choices=[], style=wx.LB_MULTIPLE)
@@ -130,7 +130,7 @@ class ManualModeFrame(wx.Frame):
             pos[a]=pos[a]-stepsize
 
         self.r.Move(arm,pos)
-        self.labelPos.SetLabel("Pos: [%4i %4i %4i]" % (pos[0],pos[1],pos[2]))
+        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % (pos[0],pos[1],pos[2]))
 
     def onButtonUp(self, event): # wxGlade: ManualModeFrame.<event_handler>
         self._movearm("z","neg")
