@@ -7,11 +7,12 @@ demomode=False # if True, don't talk to the robot at all, suitable for
 
 import serial
 import time
+import yaml
 
 ### class Robot ###
 
 class Robot():
-    def __init__(self,port):
+    def __init__(self,port='/dev/ttyUSB0',setupfile=None):
         # constants for arms
         self.armaddr=[18,28]
         self.armlimits=[[2500, 1000, 1200, 10],[1600, 1000, 1200, 10]]
@@ -40,6 +41,20 @@ class Robot():
         # init pumps
         for i in range(len(self.pumpaddr)):
             self._sendcommand(self.pumpaddr[i],"Z1 0 R")
+
+        # finally, load saved locations
+        if setupfile != None:
+            self.LoadLocations(setupfile)
+
+    ## Save/Load locations ##
+
+    def SaveLocations(self, filename='robot-setup.yml'):
+        f=file(filename,'w')
+        yaml.dump(self.locations,f)
+
+    def LoadLocations(self, filename='robot-setup.yml'):
+        f=file(filename,'r')
+        self.locations=yaml.load(f)
 
     ## Arm commands ##
 
@@ -129,7 +144,7 @@ class Robot():
             print "-> %s" % cmd
         c=self._makecommandstring(cmd)
         self.s.write(c)
-        time.sleep(0.1)
+        time.sleep(0.3)
     
         # wait for command to complete
         go=True
