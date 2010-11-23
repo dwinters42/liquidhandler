@@ -81,7 +81,7 @@ class Robot():
     
     ## Pump commands ##
 
-    def Dispense(self,pump,units):
+    def Dispense(self,units,speed=3,pump=1):
         '''Dispense units (0-2000) of liquid from syringe'''
         if int(units) > self.syringecontents[pump-1]:
             raise ValueError, "Not enough liquid in syringe!"
@@ -90,7 +90,7 @@ class Robot():
         self.Pump(pump,3,self.syringecontents[pump-1]-int(units),'out')
         self.syringecontents[pump-1]=self.syringecontents[pump-1]-int(units)
 
-    def Draw(self,pump,units,source='bottle'):
+    def Draw(self,units,source='bottle',speed=3,pump=1):
         '''Draw units (0-2000) from either bottle or sample'''
         if source == 'bottle':
             direction='in'
