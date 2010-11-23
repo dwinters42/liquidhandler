@@ -49,6 +49,8 @@ class ManualModeFrame(wx.Frame):
         self.buttonGotoPos = wx.Button(self, -1, "Goto")
         self.buttonSavePos = wx.Button(self, -1, "Save")
         self.buttonRemove = wx.Button(self, -1, "Remove")
+        self.buttonLoadLoc = wx.Button(self, -1, "Load Locations")
+        self.buttonSaveLoc = wx.Button(self, -1, "Save Locations")
 
         self.__set_properties()
         self.__do_layout()
@@ -63,6 +65,8 @@ class ManualModeFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.onButtonGoto, self.buttonGotoPos)
         self.Bind(wx.EVT_BUTTON, self.onButtonSave, self.buttonSavePos)
         self.Bind(wx.EVT_BUTTON, self.onButtonRemove, self.buttonRemove)
+        self.Bind(wx.EVT_BUTTON, self.onButtonLoadLoc, self.buttonLoadLoc)
+        self.Bind(wx.EVT_BUTTON, self.onButtonSaveLoc, self.buttonSaveLoc)
         # end wxGlade
 
         # disable windows while robot is being initialised
@@ -90,6 +94,7 @@ class ManualModeFrame(wx.Frame):
         # begin wxGlade: ManualModeFrame.__do_layout
         sizer_4 = wx.BoxSizer(wx.VERTICAL)
         sizerarmcontrol = wx.StaticBoxSizer(self.sizerarmcontrol_staticbox, wx.VERTICAL)
+        sizer_5 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_6 = wx.BoxSizer(wx.HORIZONTAL)
         grid_sizer_2 = wx.GridSizer(2, 2, 5, 5)
         grid_sizer_1 = wx.GridSizer(3, 4, 5, 5)
@@ -117,6 +122,10 @@ class ManualModeFrame(wx.Frame):
         sizer_6.Add(self.buttonSavePos, 1, wx.ALL|wx.EXPAND, 5)
         sizer_6.Add(self.buttonRemove, 1, wx.ALL|wx.EXPAND, 5)
         sizerarmcontrol.Add(sizer_6, 0, wx.EXPAND, 5)
+        sizer_5.Add(self.buttonLoadLoc, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_5.Add((20, 20), 1, wx.ALL|wx.EXPAND, 5)
+        sizer_5.Add(self.buttonSaveLoc, 1, wx.ALL|wx.EXPAND, 5)
+        sizerarmcontrol.Add(sizer_5, 0, wx.ALL|wx.EXPAND, 5)
         sizer_4.Add(sizerarmcontrol, 1, wx.ALL|wx.EXPAND, 5)
         self.SetSizer(sizer_4)
         sizer_4.Fit(self)
@@ -162,16 +171,15 @@ class ManualModeFrame(wx.Frame):
         self._movearm("z","pos")
 
     def onListBoxPosDoubleClick(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        print "Event handler `onListBoxPosDoubleClick' not implemented"
-        event.Skip()
+        self.onButtonGoto(event)
 
     def onButtonGoto(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        pos=self.r.locations.keys[self.listBoxPos.GetSelections()[0]]
+        pos=self.r.locations.keys()[self.listBoxPos.GetSelections()[0]]
         arm=int(self.spinCtrlArmSelected.GetValue())
         self.r.Goto(arm,pos)
-
-        print "Event handler `onButtonGoto' not implemented"
-        event.Skip()
+        coord=self.r.locations[pos]
+        print coord
+        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % (coord[0],coord[1],coord[2]))
 
     def onButtonSave(self, event): # wxGlade: ManualModeFrame.<event_handler>
         arm=int(self.spinCtrlArmSelected.GetValue())
@@ -180,11 +188,20 @@ class ManualModeFrame(wx.Frame):
         self._updatePosList()
 
     def onButtonRemove(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        print "Event handler `onButtonRemove' not implemented"
-        event.Skip()
+        pos=self.r.locations.keys()[self.listBoxPos.GetSelections()[0]]
+        self.r.locations.pop(pos)
+        self._updatePosList()
 
     def _updatePosList(self):
         self.listBoxPos.Set(self.r.locations.keys())
+
+    def onButtonLoadLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        self.r.LoadLocations()
+        self._updatePosList()
+
+    def onButtonSaveLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        self.r.SaveLocations()
+        self._updatePosList()
 
 # end of class ManualModeFrame
 
