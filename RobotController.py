@@ -69,7 +69,7 @@ class ManualModeFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.onButtonSaveLoc, self.buttonSaveLoc)
         # end wxGlade
 
-        self.dfile="robot-setup.yml"
+        self.dfile="robot-locations.yml"
 
         # disable windows while robot is being initialised
         wx.Yield()

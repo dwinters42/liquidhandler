@@ -48,11 +48,11 @@ class Robot():
 
     ## Save/Load locations ##
 
-    def SaveLocations(self, filename='robot-setup.yml'):
+    def SaveLocations(self, filename='robot-locations.yml'):
         f=file(filename,'w')
         yaml.dump(self.locations,f)
 
-    def LoadLocations(self, filename='robot-setup.yml'):
+    def LoadLocations(self, filename='robot-locations.yml'):
         f=file(filename,'r')
         self.locations=yaml.load(f)
 
