@@ -21,7 +21,7 @@
 import wx
 import robot
 
-robot.debug=True
+robot.debug=False
 robot.demomode=False
 
 # begin wxGlade: extracode
