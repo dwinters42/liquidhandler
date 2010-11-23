@@ -47,8 +47,8 @@ class ManualModeFrame(wx.Frame):
         self.comboBoxStepSize = wx.ComboBox(self, -1, choices=["1", "10", "100"], style=wx.CB_DROPDOWN|wx.CB_SIMPLE|wx.CB_READONLY)
         self.listBoxPos = wx.ListBox(self, -1, choices=[], style=wx.LB_SINGLE)
         self.buttonGotoPos = wx.Button(self, -1, "Goto")
-        self.buttonSavePos = wx.Button(self, -1, "Save")
-        self.buttonRemove = wx.Button(self, -1, "Remove")
+        self.buttonSavePos = wx.Button(self, -1, "Add Location")
+        self.buttonRemove = wx.Button(self, -1, "Remove Location")
         self.buttonLoadLoc = wx.Button(self, -1, "Load Locations")
         self.buttonSaveLoc = wx.Button(self, -1, "Save Locations")
 
@@ -191,7 +191,10 @@ class ManualModeFrame(wx.Frame):
         self._updatePosList()
 
     def _updatePosList(self):
-        self.listBoxPos.Set(self.r.locations.keys())
+        list=[]
+        for item in self.r.locations.keys():
+            list.append("%s %s" % (item,str(self.r.locations[item])))
+        self.listBoxPos.Set(list)
 
     def onButtonLoadLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
         self.r.LoadLocations()
