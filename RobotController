@@ -249,19 +249,22 @@ class ManualModeFrame(wx.Frame):
 
     def onButtonDrawBottle(self, event): # wxGlade: ManualModeFrame.<event_handler>
         units=int(self.textCtrlSyringeAmount.GetValue())
-        self.r.Draw(1,units,'bottle')
+        speed=int(self.textCtrlSyringeSpeed.GetValue())
+        self.r.Draw(units,'bottle',speed)
         self.syringecontent=self.syringecontent+units
         self._updateSyringeContent()
 
     def onButtonDrawSample(self, event): # wxGlade: ManualModeFrame.<event_handler>
         units=int(self.textCtrlSyringeAmount.GetValue())
-        self.r.Draw(1,units,'sample')
+        speed=int(self.textCtrlSyringeSpeed.GetValue())
+        self.r.Draw(units,'sample',speed)
         self.syringecontent=self.syringecontent+units
         self._updateSyringeContent()
 
     def onButtonDispense(self, event): # wxGlade: ManualModeFrame.<event_handler>
         units=int(self.textCtrlSyringeAmount.GetValue())
-        self.r.Dispense(1,units)
+        speed=int(self.textCtrlSyringeSpeed.GetValue())
+        self.r.Dispense(units,speed)
         self.syringecontent=self.syringecontent-units
         self._updateSyringeContent()
 
