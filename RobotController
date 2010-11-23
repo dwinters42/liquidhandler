@@ -32,6 +32,7 @@ class ManualModeFrame(wx.Frame):
         # begin wxGlade: ManualModeFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
+        self.sizer_7_staticbox = wx.StaticBox(self, -1, "Syringe")
         self.sizerarmcontrol_staticbox = wx.StaticBox(self, -1, "Arm control")
         self.statusbar = self.CreateStatusBar(1, 0)
         self.labelPos = wx.StaticText(self, -1, "Pos: [0000, 0000, 0000]")
@@ -51,6 +52,15 @@ class ManualModeFrame(wx.Frame):
         self.buttonRemove = wx.Button(self, -1, "Remove Location")
         self.buttonLoadLoc = wx.Button(self, -1, "Load Locations")
         self.buttonSaveLoc = wx.Button(self, -1, "Save Locations")
+        self.label_3 = wx.StaticText(self, -1, "Syringe content (units):")
+        self.textCtrlSyringeContent = wx.TextCtrl(self, -1, "0", style=wx.TE_READONLY)
+        self.label_3_copy = wx.StaticText(self, -1, "Syringe speed (0-20):")
+        self.textCtrlSyringeSpeed = wx.TextCtrl(self, -1, "10")
+        self.label_3_copy_1 = wx.StaticText(self, -1, "Amount to draw/dispense (units):")
+        self.textCtrlSyringeAmount = wx.TextCtrl(self, -1, "500")
+        self.buttonDrawBottle = wx.Button(self, -1, "Draw from bottle")
+        self.buttonDrawSample = wx.Button(self, -1, "Draw from sample")
+        self.buttonDispense = wx.Button(self, -1, "Dispense")
 
         self.__set_properties()
         self.__do_layout()
@@ -67,9 +77,13 @@ class ManualModeFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.onButtonRemove, self.buttonRemove)
         self.Bind(wx.EVT_BUTTON, self.onButtonLoadLoc, self.buttonLoadLoc)
         self.Bind(wx.EVT_BUTTON, self.onButtonSaveLoc, self.buttonSaveLoc)
+        self.Bind(wx.EVT_BUTTON, self.onButtonDrawBottle, self.buttonDrawBottle)
+        self.Bind(wx.EVT_BUTTON, self.onButtonDrawSample, self.buttonDrawSample)
+        self.Bind(wx.EVT_BUTTON, self.onButtonDispense, self.buttonDispense)
         # end wxGlade
 
         self.dfile="robot-locations.yml"
+        self.syringecontent=0
 
         # disable windows while robot is being initialised
         wx.Yield()
@@ -95,6 +109,9 @@ class ManualModeFrame(wx.Frame):
     def __do_layout(self):
         # begin wxGlade: ManualModeFrame.__do_layout
         sizer_4 = wx.BoxSizer(wx.VERTICAL)
+        sizer_7 = wx.StaticBoxSizer(self.sizer_7_staticbox, wx.VERTICAL)
+        sizer_8 = wx.BoxSizer(wx.HORIZONTAL)
+        grid_sizer_4 = wx.GridSizer(3, 2, 0, 0)
         sizerarmcontrol = wx.StaticBoxSizer(self.sizerarmcontrol_staticbox, wx.VERTICAL)
         sizer_5 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_6 = wx.BoxSizer(wx.HORIZONTAL)
@@ -129,6 +146,18 @@ class ManualModeFrame(wx.Frame):
         sizer_5.Add(self.buttonSaveLoc, 1, wx.ALL|wx.EXPAND, 5)
         sizerarmcontrol.Add(sizer_5, 0, wx.ALL|wx.EXPAND, 5)
         sizer_4.Add(sizerarmcontrol, 1, wx.ALL|wx.EXPAND, 5)
+        grid_sizer_4.Add(self.label_3, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
+        grid_sizer_4.Add(self.textCtrlSyringeContent, 0, wx.ALL|wx.EXPAND, 5)
+        grid_sizer_4.Add(self.label_3_copy, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
+        grid_sizer_4.Add(self.textCtrlSyringeSpeed, 0, wx.ALL|wx.EXPAND, 5)
+        grid_sizer_4.Add(self.label_3_copy_1, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
+        grid_sizer_4.Add(self.textCtrlSyringeAmount, 0, wx.ALL|wx.EXPAND, 5)
+        sizer_7.Add(grid_sizer_4, 0, wx.EXPAND, 0)
+        sizer_8.Add(self.buttonDrawBottle, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_8.Add(self.buttonDrawSample, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_8.Add(self.buttonDispense, 1, wx.ALL|wx.EXPAND, 5)
+        sizer_7.Add(sizer_8, 0, wx.ALL|wx.EXPAND, 5)
+        sizer_4.Add(sizer_7, 0, wx.ALL|wx.EXPAND, 5)
         self.SetSizer(sizer_4)
         sizer_4.Fit(self)
         self.Layout()
@@ -217,6 +246,27 @@ class ManualModeFrame(wx.Frame):
             del(dlg)
             self.r.SaveLocations(self.dfile)
             self._updatePosList()
+
+    def onButtonDrawBottle(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        units=int(self.textCtrlSyringeAmount.GetValue())
+        self.r.Draw(1,units,'bottle')
+        self.syringecontent=self.syringecontent+units
+        self._updateSyringeContent()
+
+    def onButtonDrawSample(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        units=int(self.textCtrlSyringeAmount.GetValue())
+        self.r.Draw(1,units,'sample')
+        self.syringecontent=self.syringecontent+units
+        self._updateSyringeContent()
+
+    def onButtonDispense(self, event): # wxGlade: ManualModeFrame.<event_handler>
+        units=int(self.textCtrlSyringeAmount.GetValue())
+        self.r.Dispense(1,units)
+        self.syringecontent=self.syringecontent-units
+        self._updateSyringeContent()
+
+    def _updateSyringeContent(self):
+        self.textCtrlSyringeContent.SetValue(str(self.syringecontent))
 
 # end of class ManualModeFrame
 
