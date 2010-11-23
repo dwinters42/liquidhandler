@@ -133,42 +133,37 @@ class ManualModeFrame(wx.Frame):
         # end wxGlade
 
     def onButtonYplus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self._movearm("y","pos")
+        self._movearm(1,"pos")
 
     def onButtonXminus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self._movearm("x","neg")
+        self._movearm(0,"neg")
 
     def onButtonXplus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self._movearm("x","pos")
+        self._movearm(0,"pos")
 
     def onButtonYminus(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self._movearm("y","neg")
+        self._movearm(1,"neg")
 
-    def _movearm(self,axis="x",direction="pos"):
+    def _movearm(self,axis,direction="pos"):
         arm=int(self.spinCtrlArmSelected.GetValue())
-        pos=self.r.ShowPosition(arm)
+        pos=self.r.ShowPosition(arm)[:] # [:] to actually copy the
+                                        # values, not the reference!
         stepsize=int(self.comboBoxStepSize.GetValue())
 
-        if axis == "x":
-            a=0
-        elif axis == "y":
-            a=1
-        else:
-            a=2
-
         if direction == "pos":
-            pos[a]=pos[a]+stepsize
-        elif direction == "neg" and pos[a] >= stepsize:
-            pos[a]=pos[a]-stepsize
+            pos[axis]=pos[axis]+stepsize
+        elif direction == "neg" and pos[axis] >= stepsize:
+            pos[axis]=pos[axis]-stepsize
 
         self.r.Move(pos,arm)
-        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % (pos[0],pos[1],pos[2]))
+        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % \
+                                   (pos[0],pos[1],pos[2]))
 
     def onButtonUp(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self._movearm("z","neg")
+        self._movearm(2,"neg")
 
     def onButtonDown(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self._movearm("z","pos")
+        self._movearm(2,"pos")
 
     def onListBoxPosDoubleClick(self, event): # wxGlade: ManualModeFrame.<event_handler>
         self.onButtonGoto(event)
@@ -176,18 +171,18 @@ class ManualModeFrame(wx.Frame):
     def onButtonGoto(self, event): # wxGlade: ManualModeFrame.<event_handler>
         pos=self.r.locations.keys()[self.listBoxPos.GetSelections()[0]]
         arm=int(self.spinCtrlArmSelected.GetValue())
+
         self.r.Goto(pos,arm)
-        coord=self.r.locations[pos]
-        print coord
-        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % (coord[0],coord[1],coord[2]))
+        coord=self.r.ShowPosition(arm)
+        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % \
+                                   (coord[0],coord[1],coord[2]))
 
     def onButtonSave(self, event): # wxGlade: ManualModeFrame.<event_handler>
         arm=int(self.spinCtrlArmSelected.GetValue())
-        label=wx.GetTextFromUser("Name of location:", "New position")
-        print("save new location %s" % label.encode('ascii'))
-        print("actual locations is %s" % str(self.r.ShowPosition(arm)))
-        self.r.AddPosition(label.encode('ascii'),self.r.ShowPosition(arm))
-        print(self.r.locations)
+        label=wx.GetTextFromUser("Name of location:", "New location").\
+            encode('ascii') # to have a ascii-only yaml file
+
+        self.r.AddPosition(label,self.r.ShowPosition(arm))
         self._updatePosList()
 
     def onButtonRemove(self, event): # wxGlade: ManualModeFrame.<event_handler>
@@ -197,7 +192,6 @@ class ManualModeFrame(wx.Frame):
 
     def _updatePosList(self):
         self.listBoxPos.Set(self.r.locations.keys())
-        print("_updatePosList: %s" % self.r.locations)
 
     def onButtonLoadLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
         self.r.LoadLocations()
