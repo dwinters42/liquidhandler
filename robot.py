@@ -64,7 +64,7 @@ class Robot():
 
     def Goto(self,location,armnum=1):
         '''Move arm 'armnum' to memorized position 'location' '''
-        if self.locations.keys().count(location) == 0:
+        if not self.locations.has_key(location):
             raise ValueError,"No such location!"
 
         pos=self.locations[location]
