@@ -22,7 +22,7 @@ import wx
 import robot
 
 robot.debug=True
-robot.demomode=True
+robot.demomode=False
 
 # begin wxGlade: extracode
 # end wxGlade
@@ -161,7 +161,7 @@ class ManualModeFrame(wx.Frame):
         elif direction == "neg" and pos[a] >= stepsize:
             pos[a]=pos[a]-stepsize
 
-        self.r.Move(arm,pos)
+        self.r.Move(pos,arm)
         self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % (pos[0],pos[1],pos[2]))
 
     def onButtonUp(self, event): # wxGlade: ManualModeFrame.<event_handler>
@@ -176,7 +176,7 @@ class ManualModeFrame(wx.Frame):
     def onButtonGoto(self, event): # wxGlade: ManualModeFrame.<event_handler>
         pos=self.r.locations.keys()[self.listBoxPos.GetSelections()[0]]
         arm=int(self.spinCtrlArmSelected.GetValue())
-        self.r.Goto(arm,pos)
+        self.r.Goto(pos,arm)
         coord=self.r.locations[pos]
         print coord
         self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % (coord[0],coord[1],coord[2]))
@@ -184,7 +184,10 @@ class ManualModeFrame(wx.Frame):
     def onButtonSave(self, event): # wxGlade: ManualModeFrame.<event_handler>
         arm=int(self.spinCtrlArmSelected.GetValue())
         label=wx.GetTextFromUser("Name of location:", "New position")
-        self.r.AddPosition(label,self.r.ShowPosition(arm))
+        print("save new location %s" % label.encode('ascii'))
+        print("actual locations is %s" % str(self.r.ShowPosition(arm)))
+        self.r.AddPosition(label.encode('ascii'),self.r.ShowPosition(arm))
+        print(self.r.locations)
         self._updatePosList()
 
     def onButtonRemove(self, event): # wxGlade: ManualModeFrame.<event_handler>
@@ -194,6 +197,7 @@ class ManualModeFrame(wx.Frame):
 
     def _updatePosList(self):
         self.listBoxPos.Set(self.r.locations.keys())
+        print("_updatePosList: %s" % self.r.locations)
 
     def onButtonLoadLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
         self.r.LoadLocations()

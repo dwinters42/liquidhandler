@@ -62,21 +62,21 @@ class Robot():
         '''Memorize position with coordinates [x,y,z] as 'name' '''
         self.locations[name]=coordinates
 
-    def Goto(self,armnum,location):
+    def Goto(self,location,armnum=1):
         '''Move arm 'armnum' to memorized position 'location' '''
         if self.locations.keys().count(location) == 0:
             raise ValueError,"No such location!"
 
         pos=self.locations[location]
-        self.Move(armnum,pos)
+        self.Move(pos,armnum)
 
-    def Move(self,armnum,pos=[0,0,0]):
+    def Move(self,pos=[0,0,0],armnum=1):
         '''Move arm 'armnum' to coordinates 'pos' ([x,y,z])'''
         s="PA %i %i %i" % (int(pos[0]),int(pos[1]),int(pos[2]))
         self._sendcommand(self.armaddr[armnum-1],s)
         self.curpos[armnum-1]=pos
 
-    def ShowPosition(self,armnum):
+    def ShowPosition(self,armnum=1):
         return self.curpos[armnum-1]
     
     ## Pump commands ##
