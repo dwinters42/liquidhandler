@@ -69,6 +69,8 @@ class ManualModeFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.onButtonSaveLoc, self.buttonSaveLoc)
         # end wxGlade
 
+        self.dfile="robot-setup.yml"
+
         # disable windows while robot is being initialised
         wx.Yield()
         disabler=wx.WindowDisabler()
@@ -197,12 +199,24 @@ class ManualModeFrame(wx.Frame):
         self.listBoxPos.Set(list)
 
     def onButtonLoadLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self.r.LoadLocations()
-        self._updatePosList()
+        dlg=wx.FileDialog(self, style = wx.FD_OPEN|wx.FD_FILE_MUST_EXIST\
+                              |wx.FD_CHANGE_DIR,\
+                              defaultFile=self.dfile, wildcard="*.yml")
+        if dlg.ShowModal() == wx.ID_OK:
+            self.dfile=dlg.GetPath()
+            del(dlg)
+            self.r.LoadLocations(self.dfile)
+            self._updatePosList()
 
     def onButtonSaveLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
-        self.r.SaveLocations()
-        self._updatePosList()
+        dlg=wx.FileDialog(self, style = wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT\
+                              |wx.FD_CHANGE_DIR, defaultFile = \
+                              self.dfile, wildcard="*.yml")
+        if dlg.ShowModal() == wx.ID_OK:
+            self.dfile=dlg.GetPath()
+            del(dlg)
+            self.r.SaveLocations(self.dfile)
+            self._updatePosList()
 
 # end of class ManualModeFrame
 
