@@ -19,7 +19,7 @@
 from distutils.core import setup
 
 setup(name='py-robot',
-      version="0.1",
+      version="0.2",
       license="BSD",
       description='Control program and pythion interface to the robot',
       author='Daniel Gruber',
