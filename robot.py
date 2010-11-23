@@ -163,7 +163,7 @@ class Robot():
                         word=word[0:-2]
                         if debug:
                             print "<- %s" % word
-                        if word.count('Q')>0:
+                        if word.count('Y')>0:
                             # command finished
                             go = False
                             if debug:
