@@ -186,7 +186,7 @@ class ManualModeFrame(wx.Frame):
         elif direction == "neg" and pos[axis] >= stepsize:
             pos[axis]=pos[axis]-stepsize
 
-        self.r.Move(pos,arm)
+        self.r.MoveAxis(axis,pos[axis],arm)
         self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % \
                                    (pos[0],pos[1],pos[2]))
 

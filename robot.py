@@ -76,6 +76,13 @@ class Robot():
         self._sendcommand(self.armaddr[armnum-1],s)
         self.curpos[armnum-1]=pos
 
+    def MoveAxis(self,axis=0,pos=10,armnum=1):
+        '''Move axis of arm 'armnum' to coordinate pos'''
+        axes=("X","Y","Z")
+        s="%sA %i" % (axes[axis],pos)
+        self._sendcommand(self.armaddr[armnum-1],s)
+        self.curpos[armnum-1][axis]=pos
+
     def ShowPosition(self,armnum=1):
         return self.curpos[armnum-1]
     
