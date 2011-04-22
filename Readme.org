@@ -1,5 +1,4 @@
-py-liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
-============================================================================
+#+TITLE:py-liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
 
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
@@ -21,58 +20,48 @@ The author is Daniel Gruber <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
 
-1 Installation 
-~~~~~~~~~~~~~~~
+* Installation
 
-Prerequisites: You will need the [Python interpreter] and the
-following Python modules:
+Prerequisites: You will need the [[http://www.python.org][Python interpreter]] and the following
+Python modules: 
 
-- [py-serial]
-- [py-yaml]
+- [[http://pyserial.sourceforge.net/][py-serial]]
+- [[http://pyyaml.org/][py-yaml]]
 
 And additionally for the GUI part
 
-- [wxPython]
+- [[www.wxpython.org][wxPython]]
 
 After having these installed, run the binary installer (for Windows)
 or run "python setup.py install" from the commandline on Unix.
 
-
-[Python interpreter]: http://www.python.org
-[py-serial]: http://pyserial.sourceforge.net/
-[py-yaml]: http://pyyaml.org/
-[wxPython]: www.wxpython.org
-
-2 Using the library 
-~~~~~~~~~~~~~~~~~~~~
+* Using the library
 
 A typical usage pattern would be
 
+#+BEGIN_SRC python
+import liquidhandler
 
-  import liquidhandler
-  
-  r=liquidhandler.Robot()
-  r.Move([100,100,50])
-  r.Draw(100,'sample')
-  r.Move([1000,100,50])
-  r.Dispense(100)
-  
-  r.AddPosition('wash',[100,100,50])
-  r.Goto('wash')
+r=liquidhandler.Robot()
+r.Move([100,100,50])
+r.Draw(100,'sample')
+r.Move([1000,100,50])
+r.Dispense(100)
 
-3 Using the GUI 
-~~~~~~~~~~~~~~~~
+r.AddPosition('wash',[100,100,50])
+r.Goto('wash')
+#+END_SRC
+
+* Using the GUI
 
 Just start the "RobotController" script.
 
-4 Description of the Robot serial protocol 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Description of the Robot serial protocol
 
 This is a reverse-engineered description of the serial protocol for
 reference.
 
-4.1 High-level command protocol 
-================================
+** High-level command protocol
 
 The protocol is the following:
 
@@ -84,8 +73,7 @@ The protocol is the following:
   status "A18" are sent
 - clear state with "@18"
 
-4.2 Serial communicaton 
-========================
+** Serial communicaton
 
 Commands are sent via serial port, 9600 8N1, no handshake.
 
@@ -104,8 +92,7 @@ for c in s[2:len(s)]:
 
 print "%s%c\r" % (s,chk)
 
-4.3 Addresses 
-==============
+** Addresses
 
 A command always starts with "A<addr>", where <addr> can be one of the
 following:
@@ -115,27 +102,23 @@ following:
 - 12 for syringe 2 (right)
 - 28 for arm 2 (right)
 
-4.4 Commands 
-=============
+** Commands
 
 fter the "A<addr>", the following commands can be appended
 
-4.4.1 Arms 
------------
+*** Arms
 
 - PI: initialize arm, needs to be done before first use
 - SP0: set position recovery
 - SA x y z s: set position range of arm
 - PA x y z: arm goto position
 
-4.4.2 Syringe pumps 
---------------------
+*** Syringe pumps
 
 - Sx Ay d R: set syringe speed x (1-20), position y (0-2000),
   direction of valve d (I for input, O for output) 
 
-4.5 Return codes 
-=================
+** Return codes
 
 The return code is of the following form:
 
@@ -149,3 +132,7 @@ where X is one of:
 - Y: command finished.
 
 (There may be more)
+
+
+
+

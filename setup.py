@@ -1,6 +1,6 @@
 #!/bin/env python
 
-# Copyright (c) 2010 Daniel Gruber <daniel@tydirium.org>
+# Copyright (c) 2010,2011 Daniel Gruber <daniel@tydirium.org>
 #
 # Permission to use, copy, modify, and distribute this software for
 # any purpose with or without fee is hereby granted, provided that the
@@ -18,17 +18,18 @@
 
 from distutils.core import setup
 
-setup(name='py-robot',
-      version="0.2",
+setup(name='py-liquidhandler',
+      version="0.3",
       license="BSD",
-      description='Control program and pythion interface to the robot',
+      description='Control program and pythion interface to Waters 2700 liquid handler (and compatible) robots',
       author='Daniel Gruber',
       author_email="daniel@tydirium.org",
-      package_dir={'robot': ''},
-      packages=['robot'],
+      package_dir={'liquidhandler': ''},
+      package_data={'': ['Readme.txt']},
+      packages=['liquidhandler'],
       scripts=['RobotController'],
       classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
         "License :: OSI Approved :: BSD License",
         ])
