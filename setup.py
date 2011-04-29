@@ -21,7 +21,7 @@ from distutils.core import setup
 setup(name='py-liquidhandler',
       version="0.3",
       license="BSD",
-      description='Control program and pythion interface to Waters 2700 liquid handler (and compatible) robots',
+      description='Control program and python interface to Waters 2700 liquid handler (and compatible) robots',
       author='Daniel Gruber',
       author_email="daniel@tydirium.org",
       package_dir={'liquidhandler': ''},
