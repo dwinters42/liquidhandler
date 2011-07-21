@@ -172,7 +172,7 @@ class Robot():
         # wait for command to complete
         go=True
         while go is True:
-            answer=self.s.readline(eol='\r')
+            answer=self.s.readline()
             if answer != "":
                 # we got something
                 words=answer.split('\x02')
