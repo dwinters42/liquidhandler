@@ -83,7 +83,7 @@ class Robot():
         if not self.locations.has_key(location):
             raise ValueError,"No such location!"
 
-        pos=self.locations[location]
+        pos=self.locations[location][:] # to make a copy, not a reference
         self.Move(pos,armnum)
 
     def Move(self,pos=[0,0,0],armnum=1):
