@@ -18,16 +18,16 @@
 
 from distutils.core import setup
 
-setup(name='py-liquidhandler',
-      version="0.3",
+setup(name='liquidator',
+      version="1.0",
       license="BSD",
-      description='Control program and python interface to Waters 2700 liquid handler (and compatible) robots',
+      description='Control program and python interface to Waters 2700 (and compatible) liquid handling robots',
       author='Daniel Gruber',
       author_email="daniel@tydirium.org",
-      package_dir={'liquidhandler': ''},
+      package_dir={'liquidator': ''},
       package_data={'': ['Readme.txt']},
-      packages=['liquidhandler'],
-      scripts=['RobotController'],
+      packages=['liquidator'],
+      scripts=['LiquidatorController'],
       classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
