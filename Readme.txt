@@ -1,5 +1,7 @@
-py-liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
-============================================================================
+liquidator - control Waters 2700 and compatible Liquid Handling Robots
+======================================================================
+
+
 
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
@@ -20,12 +22,11 @@ for the library. However, the library can be used without the GUI part.
 The author is Daniel Gruber <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
-
 1 Installation 
 ~~~~~~~~~~~~~~~
 
-Prerequisites: You will need the [Python interpreter] and the
-following Python modules:
+Prerequisites: You will need the [Python interpreter] and the following
+Python modules: 
 
 - [py-serial]
 - [py-yaml]
@@ -35,7 +36,7 @@ And additionally for the GUI part
 - [wxPython]
 
 After having these installed, run the binary installer (for Windows)
-or run "python setup.py install" from the commandline on Unix.
+or run "sudo python setup.py install" from the commandline on Unix.
 
 
 [Python interpreter]: http://www.python.org
@@ -48,22 +49,25 @@ or run "python setup.py install" from the commandline on Unix.
 
 A typical usage pattern would be
 
-
-  import liquidhandler
+  import liquidator
   
-  r=liquidhandler.Robot()
+  r=liquidator.Robot()
   r.Move([100,100,50])
-  r.Draw(100,'sample')
-  r.Move([1000,100,50])
-  r.Dispense(100)
+  r.AddPosition('wash')
   
-  r.AddPosition('wash',[100,100,50])
+  r.Move([1000,100,50])
+  r.AddPosition('sample')
+  
+  r.Goto('sample')
+  r.Draw(100,'sample')
   r.Goto('wash')
+  r.Dispense(100)
+
 
 3 Using the GUI 
 ~~~~~~~~~~~~~~~~
 
-Just start the "RobotController" script.
+Just start the "LiquidatorController" script.
 
 4 Description of the Robot serial protocol 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -149,3 +153,6 @@ where X is one of:
 - Y: command finished.
 
 (There may be more)
+
+[1] FOOTNOTE DEFINITION NOT FOUND: 1
+

@@ -1,4 +1,4 @@
-#+TITLE:py-liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
+#+TITLE:liquidator - control Waters 2700 and compatible Liquid Handling Robots
 
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
@@ -19,7 +19,6 @@ for the library. However, the library can be used without the GUI part.
 The author is Daniel Gruber <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
-
 * Installation
 
 Prerequisites: You will need the [[http://www.python.org][Python interpreter]] and the following
@@ -33,28 +32,31 @@ And additionally for the GUI part
 - [[www.wxpython.org][wxPython]]
 
 After having these installed, run the binary installer (for Windows)
-or run "python setup.py install" from the commandline on Unix.
+or run "sudo python setup.py install" from the commandline on Unix.
 
 * Using the library
 
 A typical usage pattern would be
 
 #+BEGIN_SRC python
-import liquidhandler
+import liquidator
 
-r=liquidhandler.Robot()
+r=liquidator.Robot()
 r.Move([100,100,50])
-r.Draw(100,'sample')
-r.Move([1000,100,50])
-r.Dispense(100)
+r.AddPosition('wash')
 
-r.AddPosition('wash',[100,100,50])
+r.Move([1000,100,50])
+r.AddPosition('sample')
+
+r.Goto('sample')
+r.Draw(100,'sample')
 r.Goto('wash')
+r.Dispense(100)
 #+END_SRC
 
 * Using the GUI
 
-Just start the "RobotController" script.
+Just start the "LiquidatorController" script.
 
 * Description of the Robot serial protocol
 
@@ -132,7 +134,3 @@ where X is one of:
 - Y: command finished.
 
 (There may be more)
-
-
-
-
