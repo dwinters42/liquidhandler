@@ -84,14 +84,30 @@ class ManualModeFrame(wx.Frame):
         self.dfile="robot-locations.yml"
         self.syringecontent=0
 
+        # read the serial port from the registry/config file
+        self.conf=wx.Config("Liquidator")
+
+        if self.conf.HasEntry("ComPort"):
+            port=self.conf.Read("ComPort")
+        else:
+            port=wx.GetTextFromUser("Please enter serial port to use:")
+
+        self.Show()
         # disable windows while robot is being initialised
         wx.Yield()
         disabler=wx.WindowDisabler()
         wx.Yield()
         busy=wx.BusyInfo("Initialising robot, please wait ...")
         wx.Yield()
-        self.r=liquidator.Robot("/dev/ttyUSB0")
+        try:
+            self.r=liquidator.Robot(port)
+        except:
+            del disabler
+            wx.LogError("Could not connect to robot! Is it switched on?")
+            return
+
         self.statusbar.SetStatusText("Ready")
+        self.conf.Write("ComPort", port)
 
     def __set_properties(self):
         # begin wxGlade: ManualModeFrame.__set_properties
