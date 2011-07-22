@@ -56,7 +56,7 @@ r.Dispense(100)
 
 * Using the GUI
 
-Just start the "LiquidatorController" script.
+Just start the "Liquidator" script.
 
 * Description of the Robot serial protocol
 

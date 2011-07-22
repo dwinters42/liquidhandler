@@ -1,8 +1,6 @@
 liquidator - control Waters 2700 and compatible Liquid Handling Robots
 ======================================================================
 
-
-
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
 handling robot. These are quite common in Mass spectrometry labs and
@@ -67,7 +65,7 @@ A typical usage pattern would be
 3 Using the GUI 
 ~~~~~~~~~~~~~~~~
 
-Just start the "LiquidatorController" script.
+Just start the "Liquidator" script.
 
 4 Description of the Robot serial protocol 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,6 +151,4 @@ where X is one of:
 - Y: command finished.
 
 (There may be more)
-
-[1] FOOTNOTE DEFINITION NOT FOUND: 1
 
