@@ -27,7 +27,7 @@ setup(name='liquidator',
       package_dir={'liquidator': ''},
       package_data={'': ['Readme.txt']},
       packages=['liquidator'],
-      scripts=['LiquidatorController'],
+      scripts=['Liquidator'],
       classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
