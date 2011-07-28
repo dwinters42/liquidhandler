@@ -201,9 +201,13 @@ class ManualModeFrame(wx.Frame):
         elif direction == "neg" and pos[axis] >= stepsize:
             pos[axis]=pos[axis]-stepsize
 
-        self.r.MoveAxis(axis,pos[axis],arm)
-        self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % \
-                                   (pos[0],pos[1],pos[2]))
+        try:
+            self.r.MoveAxis(axis,pos[axis],arm)
+        except Exception, err:
+            wx.LogError("Error: %s" % err)
+        else:
+            self.labelPos.SetLabel("Pos: [%04i, %04i, %04i]" % \
+                                       (pos[0],pos[1],pos[2]))
 
     def onButtonUp(self, event): # wxGlade: ManualModeFrame.<event_handler>
         self._movearm(2,"neg")
@@ -265,23 +269,36 @@ class ManualModeFrame(wx.Frame):
     def onButtonDrawBottle(self, event): # wxGlade: ManualModeFrame.<event_handler>
         units=int(self.textCtrlSyringeAmount.GetValue())
         speed=int(self.textCtrlSyringeSpeed.GetValue())
-        self.r.Draw(units,'bottle',speed)
-        self.syringecontent=self.syringecontent+units
-        self._updateSyringeContent()
+
+        try:
+            self.r.Draw(units,'bottle',speed)
+        except Exception, err:
+            wx.LogError("Error: %s" % err)
+        else:
+            self.syringecontent=self.syringecontent+units
+            self._updateSyringeContent()
 
     def onButtonDrawSample(self, event): # wxGlade: ManualModeFrame.<event_handler>
         units=int(self.textCtrlSyringeAmount.GetValue())
         speed=int(self.textCtrlSyringeSpeed.GetValue())
-        self.r.Draw(units,'sample',speed)
-        self.syringecontent=self.syringecontent+units
-        self._updateSyringeContent()
+        try:
+            self.r.Draw(units,'sample',speed)
+        except Exception, err:
+            wx.LogError("Error: %s" % err)
+        else:
+            self.syringecontent=self.syringecontent+units
+            self._updateSyringeContent()
 
     def onButtonDispense(self, event): # wxGlade: ManualModeFrame.<event_handler>
         units=int(self.textCtrlSyringeAmount.GetValue())
         speed=int(self.textCtrlSyringeSpeed.GetValue())
-        self.r.Dispense(units,speed)
-        self.syringecontent=self.syringecontent-units
-        self._updateSyringeContent()
+        try:
+            self.r.Dispense(units,speed)
+        except Exception, err:
+            wx.LogError("Error: %s" % err)
+        else:
+            self.syringecontent=self.syringecontent-units
+            self._updateSyringeContent()
 
     def _updateSyringeContent(self):
         self.textCtrlSyringeContent.SetValue(str(self.syringecontent))
