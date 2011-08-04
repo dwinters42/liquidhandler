@@ -25,7 +25,6 @@ setup(name='liquidator',
       author='Daniel Gruber',
       author_email="daniel@tydirium.org",
       package_dir={'liquidator': ''},
-      package_data={'': ['Readme.txt']},
       packages=['liquidator'],
       scripts=['Liquidator'],
       classifiers=[
