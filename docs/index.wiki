@@ -1,0 +1,64 @@
+This is a library and a GUI control program written in Python for
+controlling a Waters 2700 Sample Manager (and compatible) liquid
+handling robot. These are quite common in Mass spectrometry labs and
+typically have 1-2 arms with attached syringes and one 6-port valve.
+
+The library allows to easily 
+
+  *  control the movements of up to 2 arms
+  *  control the syringe pump and 6-port valve to dispense and draw
+     liquids from a reservoir or e.g. a 96-well plate
+  *  save and recall positions (like "wash", "A1" on a plate, etc.) for
+     easier scripting
+
+The GUI program provides a platform-independent graphical interface
+for the library. However, the library can be used without the GUI
+part. For a description of the serial command protocol, have a look
+[./serial_protocol.wiki|here].
+
+The author is Daniel Gruber <daniel@tydirium.org>, please contact me
+in case of questions or problems.
+
+<h1>Downloads</h1>
+
+The source code and binary installers for Windows can be downloaded
+from [http://pypi.python.org/pypi/py-liquidhandler/|here].
+
+<h1>Installation</h1>
+
+Prerequisites: You will need the [http://www.python.org|Python
+interpreter] and the following Python modules:
+
+  *  [http://pyserial.sourceforge.net/|py-serial]
+  *  [http://pyyaml.org/|py-yaml]
+
+And additionally for the GUI part
+
+  *  [www.wxpython.org|wxPython]
+
+After having these installed, run the binary installer (for Windows)
+or run "sudo python setup.py install" from the commandline on Unix.
+
+<h1>Using the library</h1>
+
+A typical usage pattern would be
+
+<verbatim>
+import liquidator
+
+r=liquidator.Robot()
+r.Move([100,100,50])
+r.AddPosition('wash')
+
+r.Move([1000,100,50])
+r.AddPosition('sample')
+
+r.Goto('sample')
+r.Draw(100,'sample')
+r.Goto('wash')
+r.Dispense(100)
+</verbatim>
+
+<h1>Using the GUI</h1>
+
+Just start the "Liquidator" script.
