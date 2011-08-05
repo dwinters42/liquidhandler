@@ -1,6 +1,6 @@
 #!/bin/env python
 
-# Copyright (c) 2010 Daniel Gruber <daniel@tydirium.org>
+# Copyright (c) 2010,2011 Daniel Gruber <daniel@tydirium.org>
 #
 # Permission to use, copy, modify, and distribute this software for
 # any purpose with or without fee is hereby granted, provided that the
@@ -16,4 +16,4 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-from liquidator import *
+from liquidhandler import *

@@ -18,10 +18,10 @@
 # PERFORMANCE OF THIS SOFTWARE.
 
 import wx
-import liquidator
+import liquidhandler
 
-liquidator.debug=False
-liquidator.demomode=False
+liquidhandler.debug=False
+liquidhandler.demomode=False
 
 # begin wxGlade: extracode
 # end wxGlade
@@ -85,7 +85,7 @@ class ManualModeFrame(wx.Frame):
         self.syringecontent=0
 
         # read the serial port from the registry/config file
-        self.conf=wx.Config("Liquidator")
+        self.conf=wx.Config("Liquidhandler")
 
         if self.conf.HasEntry("ComPort"):
             port=self.conf.Read("ComPort")
@@ -100,7 +100,7 @@ class ManualModeFrame(wx.Frame):
         busy=wx.BusyInfo("Initialising robot, please wait ...")
         wx.Yield()
         try:
-            self.r=liquidator.Robot(port)
+            self.r=liquidhandler.Robot(port)
         except:
             del disabler
             wx.LogError("Could not connect to robot! Is it switched on?")
@@ -354,7 +354,7 @@ class MainFrame(wx.Frame):
 
     def __set_properties(self):
         # begin wxGlade: MainFrame.__set_properties
-        self.SetTitle("LiquidatorController")
+        self.SetTitle("Liquidator")
         self.frame_1_statusbar.SetStatusWidths([-1])
         # statusbar fields
         frame_1_statusbar_fields = ["frame_1_statusbar"]

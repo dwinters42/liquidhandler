@@ -44,9 +44,9 @@ or run "sudo python setup.py install" from the commandline on Unix.
 A typical usage pattern would be
 
 <verbatim>
-import liquidator
+import liquidhandler
 
-r=liquidator.Robot()
+r=liquidhandler.Robot()
 r.Move([100,100,50])
 r.AddPosition('wash')
 
