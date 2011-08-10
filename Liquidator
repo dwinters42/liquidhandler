@@ -31,35 +31,36 @@ class ManualModeFrame(wx.Frame):
         # begin wxGlade: ManualModeFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.sizer_7_staticbox = wx.StaticBox(self, -1, "Syringe")
-        self.sizerarmcontrol_staticbox = wx.StaticBox(self, -1, "Arm control")
+        self.panel_1 = wx.Panel(self, -1)
+        self.sizersyringecontrol_staticbox = wx.StaticBox(self.panel_1, -1, "Syringe")
+        self.sizerarmcontrol_staticbox = wx.StaticBox(self.panel_1, -1, "Arm control")
         self.statusbar = self.CreateStatusBar(1, 0)
-        self.labelPos = wx.StaticText(self, -1, "Pos: [0000, 0000, 0000]")
-        self.buttonYplus = wx.Button(self, -1, "Y+")
-        self.buttonUp = wx.Button(self, -1, "Up")
-        self.buttonXminus = wx.Button(self, -1, "X-")
-        self.buttonXplus = wx.Button(self, -1, "X+")
-        self.buttonYminus = wx.Button(self, -1, "Y-")
-        self.buttonDown = wx.Button(self, -1, "Down")
-        self.label_2 = wx.StaticText(self, -1, "Selected Arm:")
-        self.spinCtrlArmSelected = wx.SpinCtrl(self, -1, "1", min=1, max=2)
-        self.label_2_copy = wx.StaticText(self, -1, "Stepsize for buttons:")
-        self.comboBoxStepSize = wx.ComboBox(self, -1, choices=["1", "10", "100"], style=wx.CB_DROPDOWN|wx.CB_SIMPLE|wx.CB_READONLY)
-        self.listBoxPos = wx.ListBox(self, -1, choices=[], style=wx.LB_SINGLE)
-        self.buttonGotoPos = wx.Button(self, -1, "Goto")
-        self.buttonSavePos = wx.Button(self, -1, "Add Location")
-        self.buttonRemove = wx.Button(self, -1, "Remove Location")
-        self.buttonLoadLoc = wx.Button(self, -1, "Load Locations")
-        self.buttonSaveLoc = wx.Button(self, -1, "Save Locations")
-        self.label_3 = wx.StaticText(self, -1, "Syringe content (units):")
-        self.textCtrlSyringeContent = wx.TextCtrl(self, -1, "0", style=wx.TE_READONLY)
-        self.label_3_copy = wx.StaticText(self, -1, "Syringe speed (0-20):")
-        self.textCtrlSyringeSpeed = wx.TextCtrl(self, -1, "10")
-        self.label_3_copy_1 = wx.StaticText(self, -1, "Amount to draw/dispense (units):")
-        self.textCtrlSyringeAmount = wx.TextCtrl(self, -1, "500")
-        self.buttonDrawBottle = wx.Button(self, -1, "Draw from bottle")
-        self.buttonDrawSample = wx.Button(self, -1, "Draw from sample")
-        self.buttonDispense = wx.Button(self, -1, "Dispense")
+        self.labelPos = wx.StaticText(self.panel_1, -1, "Pos: [0000, 0000, 0000]")
+        self.buttonYplus = wx.Button(self.panel_1, -1, "Y+")
+        self.buttonUp = wx.Button(self.panel_1, -1, "Up")
+        self.buttonXminus = wx.Button(self.panel_1, -1, "X-")
+        self.buttonXplus = wx.Button(self.panel_1, -1, "X+")
+        self.buttonYminus = wx.Button(self.panel_1, -1, "Y-")
+        self.buttonDown = wx.Button(self.panel_1, -1, "Down")
+        self.label_2 = wx.StaticText(self.panel_1, -1, "Selected Arm:")
+        self.spinCtrlArmSelected = wx.SpinCtrl(self.panel_1, -1, "1", min=1, max=2)
+        self.label_2_copy = wx.StaticText(self.panel_1, -1, "Stepsize for buttons:")
+        self.comboBoxStepSize = wx.ComboBox(self.panel_1, -1, choices=["1", "10", "100"], style=wx.CB_DROPDOWN|wx.CB_SIMPLE|wx.CB_READONLY)
+        self.listBoxPos = wx.ListBox(self.panel_1, -1, choices=[], style=wx.LB_SINGLE)
+        self.buttonGotoPos = wx.Button(self.panel_1, -1, "Goto")
+        self.buttonSavePos = wx.Button(self.panel_1, -1, "Add Location")
+        self.buttonRemove = wx.Button(self.panel_1, -1, "Remove Location")
+        self.buttonLoadLoc = wx.Button(self.panel_1, -1, "Load Locations")
+        self.buttonSaveLoc = wx.Button(self.panel_1, -1, "Save Locations")
+        self.label_3 = wx.StaticText(self.panel_1, -1, "Syringe content (units):")
+        self.textCtrlSyringeContent = wx.TextCtrl(self.panel_1, -1, "0", style=wx.TE_READONLY)
+        self.label_3_copy = wx.StaticText(self.panel_1, -1, "Syringe speed (0-20):")
+        self.textCtrlSyringeSpeed = wx.TextCtrl(self.panel_1, -1, "10")
+        self.label_3_copy_1 = wx.StaticText(self.panel_1, -1, "Amount to draw/dispense (units):")
+        self.textCtrlSyringeAmount = wx.TextCtrl(self.panel_1, -1, "500")
+        self.buttonDrawBottle = wx.Button(self.panel_1, -1, "Draw from bottle")
+        self.buttonDrawSample = wx.Button(self.panel_1, -1, "Draw from sample")
+        self.buttonDispense = wx.Button(self.panel_1, -1, "Dispense")
 
         self.__set_properties()
         self.__do_layout()
@@ -111,10 +112,10 @@ class ManualModeFrame(wx.Frame):
 
     def __set_properties(self):
         # begin wxGlade: ManualModeFrame.__set_properties
-        self.SetTitle("Manual Control")
+        self.SetTitle("Liquidator Robot Control")
         self.statusbar.SetStatusWidths([-1])
         # statusbar fields
-        statusbar_fields = ["manualframe_statusbar"]
+        statusbar_fields = ["Connecting to robot ..."]
         for i in range(len(statusbar_fields)):
             self.statusbar.SetStatusText(statusbar_fields[i], i)
         self.labelPos.SetFont(wx.Font(18, wx.DEFAULT, wx.NORMAL, wx.BOLD, 0, ""))
@@ -123,8 +124,9 @@ class ManualModeFrame(wx.Frame):
 
     def __do_layout(self):
         # begin wxGlade: ManualModeFrame.__do_layout
-        sizer_4 = wx.BoxSizer(wx.VERTICAL)
-        sizer_7 = wx.StaticBoxSizer(self.sizer_7_staticbox, wx.VERTICAL)
+        mainsizer = wx.BoxSizer(wx.VERTICAL)
+        mainsizer2 = wx.BoxSizer(wx.VERTICAL)
+        sizersyringecontrol = wx.StaticBoxSizer(self.sizersyringecontrol_staticbox, wx.VERTICAL)
         sizer_8 = wx.BoxSizer(wx.HORIZONTAL)
         grid_sizer_4 = wx.GridSizer(3, 2, 0, 0)
         sizerarmcontrol = wx.StaticBoxSizer(self.sizerarmcontrol_staticbox, wx.VERTICAL)
@@ -160,21 +162,23 @@ class ManualModeFrame(wx.Frame):
         sizer_5.Add((20, 20), 1, wx.ALL|wx.EXPAND, 5)
         sizer_5.Add(self.buttonSaveLoc, 1, wx.ALL|wx.EXPAND, 5)
         sizerarmcontrol.Add(sizer_5, 0, wx.ALL|wx.EXPAND, 5)
-        sizer_4.Add(sizerarmcontrol, 1, wx.ALL|wx.EXPAND, 5)
+        mainsizer2.Add(sizerarmcontrol, 1, wx.ALL|wx.EXPAND, 5)
         grid_sizer_4.Add(self.label_3, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
         grid_sizer_4.Add(self.textCtrlSyringeContent, 0, wx.ALL|wx.EXPAND, 5)
         grid_sizer_4.Add(self.label_3_copy, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
         grid_sizer_4.Add(self.textCtrlSyringeSpeed, 0, wx.ALL|wx.EXPAND, 5)
         grid_sizer_4.Add(self.label_3_copy_1, 0, wx.ALL|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, 5)
         grid_sizer_4.Add(self.textCtrlSyringeAmount, 0, wx.ALL|wx.EXPAND, 5)
-        sizer_7.Add(grid_sizer_4, 0, wx.EXPAND, 0)
+        sizersyringecontrol.Add(grid_sizer_4, 0, wx.EXPAND, 0)
         sizer_8.Add(self.buttonDrawBottle, 1, wx.ALL|wx.EXPAND, 5)
         sizer_8.Add(self.buttonDrawSample, 1, wx.ALL|wx.EXPAND, 5)
         sizer_8.Add(self.buttonDispense, 1, wx.ALL|wx.EXPAND, 5)
-        sizer_7.Add(sizer_8, 0, wx.ALL|wx.EXPAND, 5)
-        sizer_4.Add(sizer_7, 0, wx.ALL|wx.EXPAND, 5)
-        self.SetSizer(sizer_4)
-        sizer_4.Fit(self)
+        sizersyringecontrol.Add(sizer_8, 0, wx.ALL|wx.EXPAND, 5)
+        mainsizer2.Add(sizersyringecontrol, 0, wx.ALL|wx.EXPAND, 5)
+        self.panel_1.SetSizer(mainsizer2)
+        mainsizer.Add(self.panel_1, 1, wx.EXPAND, 0)
+        self.SetSizer(mainsizer)
+        mainsizer.Fit(self)
         self.Layout()
         # end wxGlade
 
@@ -304,117 +308,6 @@ class ManualModeFrame(wx.Frame):
         self.textCtrlSyringeContent.SetValue(str(self.syringecontent))
 
 # end of class ManualModeFrame
-
-
-class MainFrame(wx.Frame):
-    def __init__(self, *args, **kwds):
-        # begin wxGlade: MainFrame.__init__
-        kwds["style"] = wx.DEFAULT_FRAME_STYLE
-        wx.Frame.__init__(self, *args, **kwds)
-        
-        # Menu Bar
-        self.frame_1_menubar = wx.MenuBar()
-        wxglade_tmp_menu = wx.Menu()
-        wxglade_tmp_menu.Append(wx.ID_OPEN, "", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(wx.ID_SAVE, "", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(wx.ID_SAVEAS, "", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(wx.NewId(), "Check\tCTRL+C", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(wx.NewId(), "Run\tCTRL+R", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.AppendSeparator()
-        wxglade_tmp_menu.Append(wx.ID_EXIT, "", "", wx.ITEM_NORMAL)
-        self.frame_1_menubar.Append(wxglade_tmp_menu, "File")
-        self.SetMenuBar(self.frame_1_menubar)
-        # Menu Bar end
-        self.frame_1_statusbar = self.CreateStatusBar(1, 0)
-        
-        # Tool Bar
-        self.frame_1_toolbar = wx.ToolBar(self, -1)
-        self.SetToolBar(self.frame_1_toolbar)
-        self.frame_1_toolbar.AddLabelTool(wx.ID_OPEN, "", wx.NullBitmap, wx.NullBitmap, wx.ITEM_NORMAL, "", "")
-        # Tool Bar end
-        self.label_1 = wx.StaticText(self, -1, "Positions:")
-        self.listboxPositions = wx.ListBox(self, -1, choices=[], style=wx.LB_SINGLE|wx.LB_SORT)
-        self.buttonEditPositions = wx.Button(self, -1, "Edit Positions")
-        self.textctrlRunlist = wx.TextCtrl(self, -1, "", style=wx.TE_MULTILINE|wx.TE_LINEWRAP)
-
-        self.__set_properties()
-        self.__do_layout()
-
-        self.Bind(wx.EVT_MENU, self.openRunlist, id=wx.ID_OPEN)
-        self.Bind(wx.EVT_MENU, self.saveRunlist, id=wx.ID_SAVE)
-        self.Bind(wx.EVT_MENU, self.saveasRunlist, id=wx.ID_SAVEAS)
-        self.Bind(wx.EVT_MENU, self.checkRunlist, id=-1)
-        self.Bind(wx.EVT_MENU, self.quitApp, id=wx.ID_EXIT)
-        self.Bind(wx.EVT_TOOL, self.openRunlist, id=wx.ID_OPEN)
-        self.Bind(wx.EVT_LISTBOX_DCLICK, self.insertPosition, self.listboxPositions)
-        self.Bind(wx.EVT_BUTTON, self.edtPositions, self.buttonEditPositions)
-        # end wxGlade
-        
-        self.filename="runlist.py"
-
-    def __set_properties(self):
-        # begin wxGlade: MainFrame.__set_properties
-        self.SetTitle("Liquidator")
-        self.frame_1_statusbar.SetStatusWidths([-1])
-        # statusbar fields
-        frame_1_statusbar_fields = ["frame_1_statusbar"]
-        for i in range(len(frame_1_statusbar_fields)):
-            self.frame_1_statusbar.SetStatusText(frame_1_statusbar_fields[i], i)
-        self.frame_1_toolbar.Realize()
-        self.textctrlRunlist.SetMinSize((400,400))
-        # end wxGlade
-
-    def __do_layout(self):
-        # begin wxGlade: MainFrame.__do_layout
-        sizer_1 = wx.BoxSizer(wx.VERTICAL)
-        sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
-        sizer_3 = wx.BoxSizer(wx.VERTICAL)
-        sizer_3.Add(self.label_1, 0, wx.ALL|wx.EXPAND, 5)
-        sizer_3.Add(self.listboxPositions, 1, wx.ALL|wx.EXPAND, 5)
-        sizer_3.Add(self.buttonEditPositions, 0, wx.ALL, 5)
-        sizer_3.Add((20, 20), 1, wx.EXPAND, 0)
-        sizer_2.Add(sizer_3, 1, wx.ALL|wx.EXPAND, 5)
-        sizer_2.Add(self.textctrlRunlist, 2, wx.ALL|wx.EXPAND, 0)
-        sizer_1.Add(sizer_2, 1, wx.ALL|wx.EXPAND, 5)
-        self.SetSizer(sizer_1)
-        sizer_1.Fit(self)
-        self.Layout()
-        # end wxGlade
-
-    def edtPositions(self, event): # wxGlade: MainFrame.<event_handler>
-        print "Event handler `edtPositions' not implemented!"
-        event.Skip()
-
-    def openRunlist(self, event): # wxGlade: MainFrame.<event_handler>
-
-        print "Event handler `openRunlist' not implemented!"
-        event.Skip()
-
-    def saveRunlist(self, event): # wxGlade: MainFrame.<event_handler>
-        print "Event handler `saveRunlist' not implemented"
-        event.Skip()
-
-    def saveasRunlist(self, event): # wxGlade: MainFrame.<event_handler>
-        print "Event handler `saveasRunlist' not implemented"
-        event.Skip()
-
-    def checkRunlist(self, event): # wxGlade: MainFrame.<event_handler>
-        print "Event handler `checkRunlist' not implemented"
-        event.Skip()
-
-    def insertPosition(self, event): # wxGlade: MainFrame.<event_handler>
-        print "Event handler `insertPosition' not implemented"
-        event.Skip()
-
-    def quitApp(self, event): # wxGlade: MainFrame.<event_handler>
-        if self.textctrlRunlist.IsModified():
-            if wx.MessageBox("Save Runlist?", "Confirm", wx.YES_NO) == wx.YES:
-                self.textctrlRunlist.SaveFile(self.filename)
-
-        self.Destroy()
-
-# end of class MainFrame
-
 
 class RobotController(wx.App):
     def OnInit(self):
