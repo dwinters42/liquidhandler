@@ -19,7 +19,7 @@
 from distutils.core import setup
 
 setup(name='py-liquidhandler',
-      version="0.4",
+      version="0.5",
       license="BSD",
       description='Control program and python interface to Waters 2700 (and compatible) liquid handling robots',
       long_description='''
@@ -27,6 +27,9 @@ This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
 handling robot. These are quite common in Mass spectrometry labs and
 typically have 1-2 arms with attached syringes and one 6-port valve.
+
+Changes in Version 0.5: more bugfixes, and it looks even good in
+Windows now!
 
 The library allows to easily 
 

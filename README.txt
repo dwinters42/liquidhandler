@@ -1,5 +1,7 @@
 liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
-=========================================================================
+==================================================================================
+
+Author:  <daniel@tydirium.org>
 
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
@@ -20,22 +22,34 @@ for the library. However, the library can be used without the GUI part.
 The author is Daniel Gruber <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
+Table of Contents
+=================
 1 News 
--------
+2 Downloads 
+3 Installation 
+4 Using the library 
+5 Using the GUI 
 
+
+1 News 
+~~~~~~~
+
+- *15/8/2011*: Version 0.5, more bugfixes and it looks nice on Windows
+  now!
 - *09/08/2011*: Version 0.4, lot's of bugfixes, I use it on a daily
   basis at the moment.
 
 2 Downloads 
-------------
+~~~~~~~~~~~~
 
 The source code and binary installers for Windows can be downloaded
 [here].
 
+
 [here]: http://pypi.python.org/pypi/py-liquidhandler
 
 3 Installation 
----------------
+~~~~~~~~~~~~~~~
 
 Prerequisites: You will need the [Python interpreter] and the following
 Python modules: 
@@ -50,13 +64,14 @@ And additionally for the GUI part
 After having these installed, run the binary installer (for Windows)
 or run "python setup.py install" from the commandline on Unix.
 
+
 [Python interpreter]: http://www.python.org
 [py-serial]: http://pyserial.sourceforge.net/
 [py-yaml]: http://pyyaml.org/
 [wxPython]: www.wxpython.org
 
 4 Using the library 
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 A typical usage pattern would be
 
@@ -76,6 +91,6 @@ A typical usage pattern would be
 
 
 5 Using the GUI 
-----------------
+~~~~~~~~~~~~~~~~
 
 Just start the "Liquidator" script.

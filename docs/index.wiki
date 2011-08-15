@@ -19,6 +19,13 @@ part. For a description of the serial command protocol, have a look
 The author is Daniel Gruber <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
+<h1>News</h1>
+
+  *  <b>5/8/2011</b>: Version 0.5, more bugfixes and it looks nice even on 
+     Windows now!
+  *  <b>09/08/2011</b>: Version 0.4, lot's of bugfixes, I use it on a daily
+     basis at the moment.
+
 <h1>Downloads</h1>
 
 The source code and binary installers for Windows can be downloaded
