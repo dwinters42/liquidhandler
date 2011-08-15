@@ -236,7 +236,7 @@ class ManualModeFrame(wx.Frame):
         label=wx.GetTextFromUser("Name of location:", "New location").\
             encode('ascii') # to have a ascii-only yaml file
 
-        self.r.AddPosition(label,self.r.ShowPosition(arm))
+        self.r.AddPosition(label,self.r.ShowPosition(arm)[:])
         self._updatePosList()
 
     def onButtonRemove(self, event): # wxGlade: ManualModeFrame.<event_handler>
