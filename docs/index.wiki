@@ -1,3 +1,7 @@
+<center>
+<img src='./Liquidator-screenshot.png' alt='Liquidator screenshot' />
+</center>
+
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
 handling robot. These are quite common in Mass spectrometry labs and
