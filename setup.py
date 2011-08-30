@@ -49,7 +49,7 @@ part.
       package_data={'liquidhandler': ['README.txt']},
       url="http://www.tydirium.org/daniel/py-liquidhandler.html",
       packages=['liquidhandler'],
-      scripts=['Liquidator'],
+      scripts=['Liquidator.py'],
       keywords="robot liquid handler lab equipment",
       classifiers=[
         "Development Status :: 5 - Production/Stable",

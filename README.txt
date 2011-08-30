@@ -93,4 +93,4 @@ A typical usage pattern would be
 5 Using the GUI 
 ~~~~~~~~~~~~~~~~
 
-Just start the "Liquidator" script.
+Just start the "Liquidator.py" script.

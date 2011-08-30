@@ -82,16 +82,21 @@ class ManualModeFrame(wx.Frame):
         self.Bind(wx.EVT_BUTTON, self.onButtonDispense, self.buttonDispense)
         # end wxGlade
 
-        self.dfile="robot-locations.yml"
         self.syringecontent=0
 
-        # read the serial port from the registry/config file
+        # read the serial port and locations file from the
+        # registry/config file
         self.conf=wx.Config("Liquidhandler")
 
         if self.conf.HasEntry("ComPort"):
             port=self.conf.Read("ComPort")
         else:
             port=wx.GetTextFromUser("Please enter serial port to use:")
+
+        if self.conf.HasEntry("LocationsFile"):
+            self.dfile=self.conf.Read("LocationsFile")
+        else:
+            self.dfile=None
 
         self.Show()
         # disable windows while robot is being initialised
@@ -101,12 +106,13 @@ class ManualModeFrame(wx.Frame):
         busy=wx.BusyInfo("Initialising robot, please wait ...")
         wx.Yield()
         try:
-            self.r=liquidhandler.Robot(port)
+            self.r=liquidhandler.Robot(port, self.dfile)
         except:
             del disabler
             wx.LogError("Could not connect to robot! Is it switched on?")
             return
 
+        self._updatePosList()
         self.statusbar.SetStatusText("Ready")
         self.conf.Write("ComPort", port)
 
@@ -252,12 +258,12 @@ class ManualModeFrame(wx.Frame):
 
     def onButtonLoadLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
         dlg=wx.FileDialog(self, style = wx.FD_OPEN|wx.FD_FILE_MUST_EXIST\
-                              |wx.FD_CHANGE_DIR,\
-                              defaultFile=self.dfile, wildcard="*.yml")
+                              |wx.FD_CHANGE_DIR, wildcard="*.yml")
         if dlg.ShowModal() == wx.ID_OK:
             self.dfile=dlg.GetPath()
             del(dlg)
             self.r.LoadLocations(self.dfile)
+            self.conf.Write("LocationsFile", self.dfile)
             self._updatePosList()
 
     def onButtonSaveLoc(self, event): # wxGlade: ManualModeFrame.<event_handler>
@@ -268,6 +274,7 @@ class ManualModeFrame(wx.Frame):
             self.dfile=dlg.GetPath()
             del(dlg)
             self.r.SaveLocations(self.dfile)
+            self.conf.Write("LocationsFile", self.dfile)
             self._updatePosList()
 
     def onButtonDrawBottle(self, event): # wxGlade: ManualModeFrame.<event_handler>
