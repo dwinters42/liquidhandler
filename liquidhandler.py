@@ -104,16 +104,16 @@ class Robot():
     
     ## Pump commands ##
 
-    def Dispense(self,units,speed=3,pump=1):
+    def Dispense(self, units, speed=10, pump=1):
         '''Dispense units (0-2000) of liquid from syringe'''
         if int(units) > self.syringecontents[pump-1]:
             raise ValueError, "Not enough liquid in syringe!"
 
-        self.Pump(pump,3,self.syringecontents[pump-1],'out')
-        self.Pump(pump,3,self.syringecontents[pump-1]-int(units),'out')
+        self.Pump(pump, speed, self.syringecontents[pump-1], 'out')
+        self.Pump(pump, speed, self.syringecontents[pump-1]-int(units), 'out')
         self.syringecontents[pump-1]=self.syringecontents[pump-1]-int(units)
 
-    def Draw(self,units,source='bottle',speed=3,pump=1):
+    def Draw(self, units, source='bottle', speed=10, pump=1):
         '''Draw units (0-2000) from either bottle or sample'''
         if source == 'bottle':
             direction='in'
@@ -125,11 +125,11 @@ class Robot():
         if self.syringecontents[pump-1]+units>2000:
             raise ValueError,"Syringe can only contain up to 2000 units!"
 
-        self.Pump(pump,3,self.syringecontents[pump-1],direction)
-        self.Pump(pump,3,self.syringecontents[pump-1]+int(units),direction)
+        self.Pump(pump, speed, self.syringecontents[pump-1], direction)
+        self.Pump(pump, speed, self.syringecontents[pump-1]+int(units), direction)
         self.syringecontents[pump-1]=self.syringecontents[pump-1]+int(units)
 
-    def Pump(self,pump,speed,position,direction):
+    def Pump(self, pump, speed, position, direction):
         if int(speed) < 0 or int(speed)>20:
             raise ValueError,"Pump speed must be between 0 and 20!"
 
