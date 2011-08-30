@@ -68,4 +68,4 @@ r.Dispense(100)
 
 <h1>Using the GUI</h1>
 
-Just start the "Liquidator" script.
+Just start the "Liquidator.py" script.
