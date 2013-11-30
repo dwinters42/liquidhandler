@@ -16,7 +16,7 @@ The library allows to easily
 The GUI program provides a platform-independent graphical interface
 for the library. However, the library can be used without the GUI part.
 
-The author is Daniel Gruber <daniel@tydirium.org>, please contact me
+The author is Daniel Winters <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
 * News

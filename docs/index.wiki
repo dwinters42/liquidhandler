@@ -20,7 +20,7 @@ for the library. However, the library can be used without the GUI
 part. For a description of the serial command protocol, have a look
 [./serial_protocol.wiki|here].
 
-The author is Daniel Gruber <daniel@tydirium.org>, please contact me
+The author is Daniel Winters <daniel@tydirium.org>, please contact me
 in case of questions or problems.
 
 <h1>News</h1>

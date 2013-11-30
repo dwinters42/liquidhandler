@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Copyright (c) 2010,2011 Daniel Gruber <daniel@tydirium.org>
+# Copyright (c) 2010,2011 Daniel Winters <daniel@tydirium.org>
 #
 # Permission to use, copy, modify, and distribute this software for
 # any purpose with or without fee is hereby granted, provided that the

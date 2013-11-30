@@ -1,6 +1,6 @@
 #!/bin/env python
 
-# Copyright (c) 2010,2011 Daniel Gruber <daniel@tydirium.org>
+# Copyright (c) 2010,2011 Daniel Winters <daniel@tydirium.org>
 #
 # Permission to use, copy, modify, and distribute this software for
 # any purpose with or without fee is hereby granted, provided that the
@@ -43,7 +43,7 @@ The GUI program provides a platform-independent graphical interface
 for the library. However, the library can be used without the GUI
 part.
 ''',
-      author='Daniel Gruber',
+      author='Daniel Winters',
       author_email="daniel@tydirium.org",
       package_dir={'liquidhandler': ''},
       package_data={'liquidhandler': ['README.txt']},
