@@ -33,7 +33,7 @@ in case of questions or problems.
 <h1>Downloads</h1>
 
 The source code and binary installers for Windows can be downloaded
-from [http://pypi.python.org/pypi/py-liquidhandler/|here].
+from [https://pypi.python.org/pypi/py-liquidhandler/|here].
 
 <h1>Installation</h1>
 
@@ -45,7 +45,7 @@ interpreter] and the following Python modules:
 
 And additionally for the GUI part
 
-  *  [www.wxpython.org|wxPython]
+  *  [http://www.wxpython.org|wxPython]
 
 After having these installed, run the binary installer (for Windows)
 or run "sudo python setup.py install" from the commandline on Unix.
