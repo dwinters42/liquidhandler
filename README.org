@@ -1,4 +1,4 @@
-x#+TITLE:liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
+#+TITLE:liquidhandler - control Waters 2700 and compatible Liquid Handling Robots
 
 This is a library and a GUI control program written in Python for
 controlling a Waters 2700 Sample Manager (and compatible) liquid
@@ -29,11 +29,11 @@ in case of questions or problems.
 * Downloads
 
 The source code and binary installers for Windows can be downloaded
-[[http://pypi.python.org/pypi/py-liquidhandler][here]].
+[[https://pypi.python.org/pypi/py-liquidhandler][here]]
 
 * Installation
 
-Prerequisites: You will need the [[http://www.python.org][Python interpreter]] and the following
+Prerequisites: You will need the [[https://www.python.org][Python interpreter]] and the following
 Python modules: 
 
 - [[http://pyserial.sourceforge.net/][py-serial]]

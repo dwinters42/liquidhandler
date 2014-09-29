@@ -37,7 +37,7 @@ from [https://pypi.python.org/pypi/py-liquidhandler/|here].
 
 <h1>Installation</h1>
 
-Prerequisites: You will need the [http://www.python.org|Python
+Prerequisites: You will need the [https://www.python.org|Python
 interpreter] and the following Python modules:
 
   *  [http://pyserial.sourceforge.net/|py-serial]

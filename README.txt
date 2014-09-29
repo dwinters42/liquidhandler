@@ -46,7 +46,7 @@ The source code and binary installers for Windows can be downloaded
 [here].
 
 
-[here]: http://pypi.python.org/pypi/py-liquidhandler
+[here]: https://pypi.python.org/pypi/py-liquidhandler
 
 3 Installation 
 ~~~~~~~~~~~~~~~
@@ -65,7 +65,7 @@ After having these installed, run the binary installer (for Windows)
 or run "python setup.py install" from the commandline on Unix.
 
 
-[Python interpreter]: http://www.python.org
+[Python interpreter]: https://www.python.org
 [py-serial]: http://pyserial.sourceforge.net/
 [py-yaml]: http://pyyaml.org/
 [wxPython]: www.wxpython.org
